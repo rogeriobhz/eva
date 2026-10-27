@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "app.netlify.evahorarios.twa",
+        "sha256_cert_fingerprints": ["3F:32:DD:54:B1:E8:02:03:8B:EA:84:6E:B3:5B:54:1B:25:85:5D:7D:8A:16:BD:01:87:DC:D7:AC:C6:90:4F:7B"]
+      }
+    }]

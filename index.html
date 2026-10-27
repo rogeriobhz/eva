@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="EVA">
+<meta name="theme-color" content="#135d75">
+<title>EVA – Horários escolares</title>
+<link rel="icon" href="logo-eva.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<style>
+:root{color-scheme:light;--bg:#f3f6f7;--gr:rgba(19,93,117,.07);--sf:#fff;--tx:#14232a;--mt:#5d7179;--ln:#d9e3e7;--bd:#0a171c;--bt:#eef7fa;--yl:#135d75;--yt:#fff;--rd:#cd3d3b;--gn:#508d4e;--gt:#2f6b2d;--bl:#135d75;--bs:#dcebf1;--rs:#fbe0dd;--rt:#9a2f25;--gs:#dbeeda}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#12181b;--gr:rgba(98,182,207,.06);--sf:#192226;--tx:#e8f0f3;--mt:#93a7af;--ln:#27363c;--bd:#0a171c;--bt:#e8f0f3;--bl:#62b6cf;--bs:#173440;--rs:#4a2321;--rt:#ffb7b0;--gs:#1f3522;--gt:#8cc98a}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#12181b;--gr:rgba(98,182,207,.06);--sf:#192226;--tx:#e8f0f3;--mt:#93a7af;--ln:#27363c;--bd:#0a171c;--bt:#e8f0f3;--bl:#62b6cf;--bs:#173440;--rs:#4a2321;--rt:#ffb7b0;--gs:#1f3522;--gt:#8cc98a}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;color:var(--tx);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:16px;line-height:1.5;background:var(--bg) linear-gradient(var(--gr) 1px,transparent 1px) 0 0/100% 24px,linear-gradient(90deg,var(--gr) 1px,transparent 1px) 0 0/24px 100%;min-height:100vh}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--yl);z-index:10}
+.app{max-width:560px;margin:auto;padding-bottom:calc(92px + env(safe-area-inset-bottom,0px))}
+.top{background:var(--yl);color:var(--bt);padding:18px 18px 28px;border-radius:0 0 28px 28px;position:relative}
+.top::after{content:"";position:absolute;left:18px;right:18px;bottom:10px;height:3px;border-radius:3px;background:repeating-linear-gradient(90deg,var(--bt) 0 10px,transparent 10px 18px);opacity:.25}
+.logo{display:flex;align-items:center;gap:12px}
+.logo-img{width:46px;height:46px;border-radius:22%;object-fit:cover;display:block;flex:none;box-shadow:0 2px 8px rgba(0,0,0,.35)}.logo-img.big{width:168px;height:168px;margin:14px auto 12px;box-shadow:0 6px 22px rgba(0,0,0,.4)}
+.top h1{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-weight:800;font-size:1.7rem;line-height:1;letter-spacing:.06em}
+.top p{margin:2px 0 0;font-size:.85rem;opacity:.8}
+.st{display:flex;gap:8px;margin-top:14px}
+.st div{flex:1;background:rgba(255,255,255,.1);border-radius:12px;padding:8px 10px;font-size:.78rem}
+.st b{display:block;font-size:1.25rem;color:#fff}
+main{padding:16px}
+h2{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-weight:800;font-size:1.2rem;line-height:1.25;margin:4px 0 12px}
+.card{background:var(--sf);border:1px solid var(--ln);border-radius:20px;padding:16px;margin-bottom:14px;box-shadow:0 2px 0 var(--ln)}
+label{display:block;font-weight:700;font-size:.85rem;margin:12px 0 5px;color:var(--mt)}
+input,select{width:100%;padding:13px 14px;border:2px solid var(--ln);border-radius:14px;background:var(--bg);color:var(--tx);font:inherit}
+input:focus,select:focus{outline:none;border-color:var(--bl)}
+button{font:inherit;cursor:pointer}button:focus-visible{outline:3px solid var(--bl);outline-offset:2px}
+.row{display:flex;gap:10px;align-items:flex-end}.row>*{flex:1;min-width:0}
+.btn{width:100%;border:0;background:var(--yl);color:var(--yt);font-weight:800;padding:15px;border-radius:16px;box-shadow:0 4px 0 #0c3f50}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 #0c3f50}
+.btn.g{background:var(--bs);color:var(--bl);box-shadow:none;padding:11px;font-weight:700}
+.btn.d{background:var(--rd);color:#fff;box-shadow:none;padding:9px;font-weight:700;font-size:.85rem}
+.btn.s{width:auto;padding:9px 14px;font-size:.85rem}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.chip{background:var(--bs);color:var(--bl);font-weight:700;padding:8px 8px 8px 14px;border-radius:999px;display:flex;gap:8px;align-items:center}
+.chip i{font-style:normal;background:var(--bl);color:var(--bs);width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:.8rem;cursor:pointer}
+.tn{font-weight:800;margin:14px 0 4px}.hb{display:flex;gap:8px;margin-top:10px}.hb button{background:rgba(255,255,255,.16);color:#fff;border:0;border-radius:10px;padding:8px 14px;font:inherit;font-weight:700;font-size:.85rem;cursor:pointer}.hb button:disabled{opacity:.35;cursor:default}.lg2{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}.lg2 label{display:flex;align-items:center;gap:6px;margin:0;font-size:.8rem;font-weight:600;color:var(--tx)}.lg2 input{width:28px;height:28px;padding:0;border:0;border-radius:6px;background:none}.empty{color:var(--mt);text-align:center;padding:16px 8px}.chip.tg{padding:8px 14px;cursor:pointer;background:var(--sf);border:2px solid var(--ln);color:var(--mt)}.chip.tg.on{background:var(--bs);border-color:var(--bl);color:var(--bl)}
+.sc{overflow-x:auto;margin:0 -4px}
+table{border-collapse:separate;border-spacing:3px;width:100%;min-width:330px}
+th{font-size:.75rem;color:var(--mt);font-weight:700;padding:4px}button[disabled]{opacity:.35;cursor:default}th small{display:block;font-weight:600;font-size:.62rem;opacity:.9}
+td{padding:0;text-align:center;font-size:.72rem;vertical-align:top}
+td.int{background:var(--ln);color:var(--mt);font-size:.68rem;padding:2px;border-radius:6px}
+.av{width:100%;height:42px;border:0;border-radius:10px;font-weight:800;background:var(--gs);color:var(--gt)}
+.av.off{background:var(--rs);color:var(--rt)}
+.cell{border-radius:10px;padding:5px 3px;min-height:46px;line-height:1.2;box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.dm{border:2px dashed var(--ln);border-radius:16px;padding:10px;margin-bottom:10px}
+.dm .row{margin-bottom:8px}
+.ck{display:flex;align-items:center;gap:8px;margin:2px 0 8px;font-weight:600;font-size:.88rem;color:var(--tx)}
+.ck input{width:20px;height:20px;accent-color:var(--bl)}
+.pr{display:flex;flex-wrap:wrap;align-items:center;gap:12px;padding:12px 0;border-top:1px solid var(--ln)}
+.pr:first-child{border-top:0}
+.av2{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font-weight:800;color:#10201a;flex:none}
+.pr div.i{flex:1;min-width:0}.pr small{display:block;color:var(--mt)}
+.warn{background:var(--rs);color:var(--rt);border-left:4px solid var(--rd);padding:12px;border-radius:14px;margin-top:12px;font-size:.88rem}
+.ok{background:var(--gs);border-left:4px solid var(--gn);padding:12px;border-radius:14px;margin-top:12px;font-weight:600}
+textarea{width:100%;min-height:110px;border:2px solid var(--ln);border-radius:14px;background:var(--bg);color:var(--tx);padding:10px;font:12px monospace}
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;justify-content:center;padding:0 12px calc(8px + env(safe-area-inset-bottom,0px))}
+.tabs div{display:flex;width:100%;max-width:536px;background:var(--bd);border-radius:24px;padding:6px;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+.tabs button{flex:1;border:0;background:none;color:var(--bt);opacity:.65;padding:8px 2px;border-radius:18px;font-size:.7rem;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:2px}
+.tabs button span{font-size:1.3rem;line-height:1.1}
+.tabs button.on{background:var(--yl);color:var(--yt);opacity:1}
+.hint{font-size:.85rem;color:var(--mt);margin:0 0 4px}
+@media print{.tabs,.top,.np{display:none!important}body{background:#fff}.app{padding:0}.card{box-shadow:none;border:0}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style>
+</head>
+<body>
+<div id="lg" style="max-width:420px;margin:8vh auto;padding:20px"><div class="card" style="text-align:center;padding:24px 20px"><p style="font-weight:800;font-size:1.1rem;margin:0;color:var(--tx)">Login somente por Gmail!</p><img src="logo-eva.png" alt="EVA" class="logo-img big"><h2 style="margin:0 0 8px">EVA</h2><p style="margin:0 0 4px;font-weight:600;color:var(--tx)">Solução intuitiva para Horários Escolares.</p><p class="hint" style="margin:0">Desenvolvido por Professor Rogerio Nascimento</p><p style="margin:2px 0 18px"><a href="https://www.instagram.com/rogeriobhz/" target="_blank" rel="noopener" style="color:var(--bl);font-weight:800;text-decoration:none">@rogeriobhz</a></p><button class="btn" id="lb" onclick="FB.login()">Entrar com Google</button><p id="lm" class="hint" style="color:var(--rt)"></p></div></div>
+<div class="app" style="display:none">
+<div class="top"><div class="logo"><img src="logo-eva.png" alt="EVA" class="logo-img"><div><h1>EVA</h1><p id="esn" onclick="go('esc')" style="cursor:pointer;font-weight:700;opacity:1;color:#cfeaf3"></p><p id="cs" style="font-size:.78rem"></p><p style="font-size:.78rem"><span id="who"></span> · <a href="#" onclick="FB.out();return false" style="color:#cfeaf3">Sair</a></p></div></div><div class="st" id="st"></div><div class="hb np" id="hb"></div></div>
+<main id="m"></main>
+</div>
+<div class="tabs" style="display:none"><div id="tb"></div></div>
+<script>(function(){var L="data:image/png;base64,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";function f(){document.querySelectorAll("img.logo-img").forEach(function(i){i.onerror=function(){i.onerror=null;i.src=L};if(i.complete&&i.naturalWidth===0)i.src=L});var k=document.querySelector('link[rel="icon"]');if(k)k.href=L}if(document.readyState=="loading")document.addEventListener("DOMContentLoaded",f);else f()})()</script>
+<script>if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}))</script>
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {getAuth,GoogleAuthProvider,signInWithPopup,signInWithRedirect,onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {getFirestore,doc,collection,query,where,setDoc,updateDoc,deleteDoc,getDocs,onSnapshot} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+/* ===== CONFIGURE AQUI (veja o LEIA-ME) ===== */
+const CFG={apiKey:"AIzaSyCGD2Yrenv84jlQ_J-MX31X9J__cTGXm3I",authDomain:"eva-horarios.firebaseapp.com",projectId:"eva-horarios",storageBucket:"eva-horarios.firebasestorage.app",messagingSenderId:"250967529540",appId:"1:250967529540:web:2c203daf1811996453c411"};
+const ADMINS=["rogeriodireito@gmail.com"];
+/* =========================================== */
+const $=id=>document.getElementById(id),msg=t=>{$("lm").textContent=t};
+const au=getAuth(initializeApp(CFG)),db=getFirestore();
+let started=false,me=null;
+window.FB={out:()=>signOut(au).then(()=>location.reload()),login:async()=>{msg("");const p=new GoogleAuthProvider();p.setCustomParameters({prompt:"select_account"});
+ try{await signInWithPopup(au,p)}catch(e){if(e.code=="auth/popup-blocked"||e.code=="auth/operation-not-supported-in-this-environment")signInWithRedirect(au,p);else if(e.code!="auth/popup-closed-by-user")msg("Não foi possível entrar ("+(e.code||e.message)+"). "+(e.code=="auth/unauthorized-domain"?"Adicione este site em Authentication > Configurações > Domínios autorizados no Firebase.":e.code=="auth/operation-not-allowed"?"Ative o login Google em Authentication > Método de login no Firebase.":"Verifique a configuração e tente de novo."))}}};
+const DBs={collection:p=>({doc:id=>{const r=doc(db,p,id);return{set:d=>setDoc(r,d),update:d=>updateDoc(r,d),delete:()=>deleteDoc(r),onSnapshot:(f,e)=>onSnapshot(r,s=>f({exists:s.exists(),data:()=>s.data()}),e)}},
+ where:(f,o,v)=>({onSnapshot:(cb,e)=>onSnapshot(query(collection(db,p),where(f,o,v)),s=>cb({docs:s.docs.map(d=>({id:d.id,data:()=>d.data()}))}),e)}),get:async()=>{const s=await getDocs(collection(db,p));return{docs:s.docs.map(d=>({id:d.id,data:()=>d.data()}))}},onSnapshot:(f,e)=>onSnapshot(collection(db,p),s=>f({docs:s.docs.map(d=>({id:d.id,data:()=>d.data()}))}),e)})};
+const US={id:async()=>me.uid,email:async()=>me.email,search:async q=>{q=(q||"").toLowerCase();const s=await getDocs(collection(db,"usuarios"));return s.docs.map(d=>({id:d.id,...d.data()})).filter(u=>!q||(u.nome||"").toLowerCase().includes(q)||(u.email||"").includes(q)).slice(0,15).map(u=>({id:u.id,name:(u.nome||"")+" · "+u.email,guest:false}))}};
+const DL={save:async({filename,data})=>{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([data],{type:"application/json"}));a.download=filename;document.body.appendChild(a);a.click();a.remove()}};
+window.claude={use:async n=>n=="db"?DBs:n=="user"?US:n=="downloads"?DL:null};
+onAuthStateChanged(au,async u=>{
+ if(!u){$("lg").style.display="";return}
+ const em=(u.email||"").toLowerCase();
+ if(!em.endsWith("@gmail.com")){await signOut(au);msg("Use uma conta @gmail.com.");return}
+ me=u;try{await setDoc(doc(db,"usuarios",u.uid),{nome:u.displayName||"",email:em,visto:Date.now()})}catch(e){}
+ if(started)return;started=true;
+ $("lg").style.display="none";document.querySelector(".app").style.display="";document.querySelector(".tabs").style.display="";$("who").textContent=em;
+ const src=$("app-src").textContent.replace('const USER=false,KEY=USER?"eva-u":"eva"','const USER='+!ADMINS.includes(em)+',KEY="eva-'+u.uid+'"');
+ const sc=document.createElement("script");sc.textContent=src;document.body.appendChild(sc);
+});
+</script>
+<script type="text/plain" id="app-src">
+const DN=["Seg","Ter","Qua","Qui","Sex","Sáb"],TN={M:"Manhã",T:"Tarde",N:"Noite"},TI={M:"☀️",T:"🌤️",N:"🌙"},TK=["M","T","N"];
+const PAL=["#f4a6a6","#f7c873","#a8d98a","#7fd1c4","#8fb8f5","#c3a6f2","#f5a6d4","#d9c27a","#9ad0e8","#e8a07a","#b5d98a","#c9b3a0"];const USER=false,KEY=USER?"eva-u":"eva";let R=null;try{R=JSON.parse(localStorage.getItem(KEY))}catch(e){}
+const blank=()=>({cfg:{d:5,p:5,i:2},turmas:[],tur:{},profs:[],hor:null,fail:0});
+if(R&&R.cfg)R={cur:"e1",es:[{id:"e1",nome:"Minha escola",ano:new Date().getFullYear(),d:R}]};
+R=R&&R.es&&R.es.length?R:{cur:"e1",es:[{id:"e1",nome:"Minha escola",ano:new Date().getFullYear(),d:blank()}]};
+let S=(R.es.find(e=>e.id==R.cur)||R.es[0]).d;
+S=S||{cfg:{d:5,p:5,i:2},turmas:[],tur:{},profs:[],hor:null,fail:0};
+function ordP(o){if(!o.profs)return;const k=p=>[p.ef?0:1,p.dv||"9999-99-99"];o.profs=o.profs.map((p,i)=>[p,i]).sort((a,b)=>{const x=k(a[0]),y=k(b[0]);return x[0]-y[0]||(x[1]<y[1]?-1:x[1]>y[1]?1:0)||a[1]-b[1]}).map(a=>a[0])}
+function norm(o){ordP(o);o.cfg=o.cfg||{};o.cfg.pf=o.cfg.pf||5;o.cfg.pn=o.cfg.pn||4;if(!o.cfg.i2){o.cfg.i2=1;o.cfg.i=2}if(!o.cfg.iv3){o.cfg.iv3=1;o.cfg.iv={M:3,T:3,N:2};o.cfg.ini={M:"07:00",T:"13:00",N:"18:50"};o.cfg.du=50;o.cfg.ivd=20}o.cfg.iv=o.cfg.iv||{M:3,T:3,N:2};o.cfg.ini=Object.assign({M:"07:00",T:"13:00",N:"18:50"},o.cfg.ini||{});o.cfg.du=o.cfg.du||50;o.cfg.ivd=o.cfg.ivd||20;o.niv=o.niv||{};o.dcor=o.dcor||{};o.cm=o.cm||"p";o.tur=o.tur||{};o.turmas.forEach(t=>{if(!o.tur[t])o.tur[t]="M";if(isEJA(t))o.tur[t]="N"});o.profs.forEach((p,i)=>{if(!p.cor)p.cor=PAL[i%PAL.length];p.agr=!!p.agr;p.ef=!!p.ef;p.dv=p.dv||"";p.dias=p.dias||[];for(const k of Object.keys(p.off||{}))if(/^\d/.test(k)){TK.forEach(t=>p.off[t+k]=p.off[k]);delete p.off[k]}p.dem.forEach(x=>{if(!x.turmas)x.turmas=x.turma?[x.turma]:[];delete x.turma})})}norm(S);
+const localSave=()=>{try{localStorage.setItem(KEY,JSON.stringify(R))}catch(e){}bkTouch()};
+const save=()=>{if(USER&&BLK)return;localSave();hPush();cloudTouch();admTouch();admPub()};
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const TABS=[["cfg","🏫","Turmas"],["prof","📝","Professores"],["gen","✨","Horário"],["bak","💾","Backup"]];
+let tab="cfg",draft=null,view={m:"t",k:""},lastTn="M";
+const hue=s=>{let h=0;for(const c of s)h=(h*31+c.charCodeAt(0))%360;return h};
+const tx=h=>{const n=parseInt(h.slice(1),16),r=n>>16,g=n>>8&255,b=n&255;return (r*299+g*587+b*114)/1000>150?"#10201a":"#fff"};
+const dcol=d=>{S.dcor=S.dcor||{};if(!S.dcor[d])S.dcor[d]=PAL[Object.keys(S.dcor).length%PAL.length];return S.dcor[d]};
+const pcol=n=>(S.profs.find(p=>p.nome==n)||{}).cor||"#ddd";
+const cstyle=c=>{const m=S.cm||"p";if(m=="b")return "background:#fff;color:#000;border:1.5px solid #000";const b=m=="d"?dcol(c.disc):pcol(c.pn||c.prof);return `background:${b};color:${tx(b)}`};
+function legend(){const m=S.cm||"p";if(m=="b")return "";let h='<div class="lg2">';
+ if(m=="p")S.profs.forEach((p,k)=>{h+=`<label><input type="color" value="${p.cor}" onchange="setPc(${k},this.value)">${esc(p.nome)}</label>`});
+ else{window.LD=[...new Set(Object.values(S.hor||{}).flatMap(r=>Object.values(r).map(c=>c.disc)))];LD.forEach((n,i)=>{h+=`<label><input type="color" value="${dcol(n)}" onchange="setDc(${i},this.value)">${esc(n)}</label>`})}
+ return h+"</div>"}
+function setPc(k,v){S.profs[k].cor=v;save();render()}
+function setDc(i,v){S.dcor[LD[i]]=v;save();render()}
+function prn(){try{window.print()}catch(e){alert("Não foi possível abrir a impressão aqui. Abra o EVA no navegador do aparelho e tente de novo.")}}
+const gaps=a=>a.length?Math.max(...a)-Math.min(...a)+1-a.length:0,gd=(a,s)=>gaps(a.concat(s))-gaps(a);
+const pl=p=>p.dem.reduce((a,x)=>a+(+x.aulas||0)*x.turmas.length,0);
+const tot=()=>S.profs.reduce((a,p)=>a+pl(p),0);
+/* regra: aulas por dia conforme o nível e o turno da turma */
+const isFund=n=>/^\s*[6-9](\d{2}(?!\d)|(?!\d))/.test(n);
+function isEJA(n){return /(^|[^a-zà-ú])eja([^a-zà-ú]|$)/i.test(String(n))}
+const nivel=t=>(S.niv&&S.niv[t])||(isEJA(t)?"O":isFund(t)?"F":"O");
+const ppd=t=>(S.tur[t]=="N"||isEJA(t))?S.cfg.pn:(nivel(t)=="F"?S.cfg.pf:S.cfg.p);
+const Pn=tn=>{const a=S.turmas.filter(t=>S.tur[t]==tn).map(ppd);return a.length?Math.max(...a):S.cfg.p};
+const IV=tn=>{const v=S.cfg.iv?S.cfg.iv[tn]:undefined;return v==null?(S.cfg.i||0):v};
+const hm=m=>String(Math.floor(m/60)).padStart(2,"0")+":"+String(m%60).padStart(2,"0");
+const tmin=tn=>{const a=String((S.cfg.ini||{})[tn]||{M:"07:00",T:"13:00",N:"18:50"}[tn]).split(":").map(Number);return a[0]*60+(a[1]||0)};
+const slotT=(tn,s)=>tmin(tn)+s*(S.cfg.du||50)+(IV(tn)&&s>=IV(tn)?(S.cfg.ivd||20):0);
+const endT=tn=>slotT(tn,Pn(tn)-1)+(S.cfg.du||50);
+const thT=(tn,s)=>`<th>${s+1}ª<small>${hm(slotT(tn,s))}</small></th>`;
+const intT=(tn,span)=>`<tr><td class="int" colspan="${span}">intervalo ${hm(tmin(tn)+IV(tn)*(S.cfg.du||50))}–${hm(slotT(tn,IV(tn)))}</td></tr>`;
+/* desfazer / refazer */
+const HST={};let HRES=false;
+const hs=()=>HST[R.cur]||(HST[R.cur]={a:[JSON.stringify(S)],i:0,t:0});
+function hPush(){if(HRES)return;const h=hs(),j=JSON.stringify(S);if(h.a[h.i]===j)return;const n=Date.now();h.a=h.a.slice(0,h.i+1);if(n-h.t<1200&&h.i>0)h.a[h.i]=j;else{h.a.push(j);h.i++;if(h.a.length>30){h.a.shift();h.i--}}h.t=n;hBtn()}
+function hGo(d){if(USER&&BLK)return;const h=hs(),k=h.i+d;if(k<0||k>=h.a.length)return;h.i=k;HRES=true;try{const x=JSON.parse(h.a[k]);norm(x);ce().d=S=x;draft=null;S.hor&&(S.fail=S.fail||0);save()}finally{HRES=false}toast(d<0?"Última alteração desfeita.":"Alteração refeita.");render()}
+function hBtn(){const e=document.getElementById("hb");if(!e)return;const h=hs();e.innerHTML=`<button onclick="hGo(-1)" ${h.i<1?"disabled":""}>↩ Desfazer</button><button onclick="hGo(1)" ${h.i>=h.a.length-1?"disabled":""}>↪ Refazer</button>`}
+const tns=p=>TK.filter(k=>p.dem.some(x=>x.turmas.some(t=>S.tur[t]==k)));
+function go(t){tab=t;render();scrollTo(0,0)}
+function render0(){hBtn();
+ document.getElementById("tb").innerHTML=TABS.map(t=>`<button class="${t[0]==tab?"on":""}" onclick="go('${t[0]}')"><span>${t[1]}</span>${t[2]}</button>`).join("");
+ document.getElementById("st").innerHTML=`<div><b>${S.turmas.length}</b>turmas</div><div><b>${S.profs.length}</b>professores</div><div><b>${tot()}</b>aulas/semana</div>`;
+ hd();document.getElementById("m").innerHTML=nudge()+({cfg:vCfg,prof:vProf,gen:vGen,bak:vBk,esc:USER?vCfg:vEsc})[tab]();
+}
+window.alert=m=>toast(m);
+function toast(m){let t=document.getElementById("ts");if(!t){t=document.createElement("div");t.id="ts";t.style.cssText="position:fixed;left:12px;right:12px;bottom:calc(96px + env(safe-area-inset-bottom,0px));max-width:536px;margin:auto;background:var(--bd);color:var(--bt);padding:12px 16px;border-radius:14px;z-index:40;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.3)";document.body.appendChild(t)}t.textContent=m;t.style.display="block";clearTimeout(t._h);t._h=setTimeout(()=>t.style.display="none",4000)}
+function ask(m,fn,lb){const o=document.createElement("div");o.style.cssText="position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:50;display:grid;place-items:center;padding:20px";o.innerHTML=`<div class="card" style="max-width:380px;width:100%;margin:0"><h2>${esc(m)}</h2><div style="display:grid;gap:10px;margin-top:14px"><button class="btn d" id="ay" style="padding:14px">${lb||"Confirmar"}</button><button class="btn g" id="an">Cancelar</button></div></div>`;document.body.appendChild(o);o.querySelector("#an").onclick=()=>o.remove();o.querySelector("#ay").onclick=()=>{o.remove();fn()}}
+if(!USER)TABS.unshift(["esc","🏛️","Escolas"]);
+const ULINK=location.origin+location.pathname;
+const ce=()=>R.es.find(e=>e.id==R.cur)||R.es[0];
+const hd=()=>{const e=document.getElementById("esn");if(e){e.textContent=ce().nome+" · "+ce().ano+(USER?"":" ▾");e.onclick=USER?null:()=>go("esc")}};
+const hora=t=>new Date(t||Date.now()).toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});
+const ADMIN_EMAIL="rogeriodireito@gmail.com";
+let DB=null,UID=null,EM="",CL={},CS="",dirty=false,ver=0,tp=null,BLK=false,LADM=0,SEEN=0,aT=0,aI=null,aSch=null;
+const setCs=t=>{CS=t;const e=document.getElementById("cs");if(e)e.textContent=t};
+const nudge=()=>{if(USER&&BLK)return `<div class="warn" style="margin:0 0 12px">🔒 O administrador está editando esta escola agora. Você pode acompanhar, mas a edição está bloqueada por enquanto. Quando ele terminar, será liberada e você será avisado.</div>`;if(tab=="bak")return "";if(!USER){const n=R.es.filter(x=>x.pendC).length;if(n)return `<div class="ok np" style="margin:0 0 12px;cursor:pointer" onclick="go('esc')">${n} escola(s) com alterações de colaboradores aguardando. Elas serão aplicadas quando você parar de editar.</div>`}
+ return S.profs.length&&(!ce().bk||Date.now()-ce().bk>6048e5)?`<div class="warn np" style="margin:0 0 12px;cursor:pointer" onclick="go('bak')">${USER?"Salve o backup em arquivo para ter uma cópia.":"Salve o backup desta escola no Google Drive."} Toque aqui.</div>`:""};
+/* nuvem: uma montagem única por escola (escolas/{id}), compartilhada com os colaboradores */
+function cloudTouch(){if(!USER||!DB||!UID||!R.lock)return;dirty=true;ver++;setCs("☁️ Salvando…");clearTimeout(tp);tp=setTimeout(pushC,1200)}
+async function pushC(){const v=ver;try{const x=ce(),rev=Date.now();await DB.collection("escolas").doc(R.lock).update({d:JSON.stringify(x.d),rev,by:UID,at:rev});R.lrev=rev;if(v==ver)dirty=false;localSave();setCs("☁️ Salvo na nuvem às "+hora())}catch(e){setCs("⚠️ Sem conexão com a nuvem")}}
+async function submitC(auto){if(!USER||!DB||!UID||!R.lock){if(!auto)toast("Nuvem indisponível. Use o backup em arquivo.");return}clearTimeout(tp);if(dirty||!R.lrev)await pushC();if(!auto)toast(dirty?"Não foi possível salvar agora.":"Salvo. O administrador e os colaboradores já veem esta versão.")}
+function watchU(){DB.collection("escolas").where("emails","array-contains",EM).onSnapshot(sn=>{const ds=sn.docs.map(d=>({id:d.id,c:d.data()})).filter(o=>o.c&&o.c.d);if(!ds.length){setCs("Aguardando o administrador liberar sua escola.");return}
+ const o=ds.find(q=>q.id==R.lock)||ds[0],c=o.c;if((c.adm||0)!==LADM){LADM=c.adm||0;SEEN=Date.now()}chk();if(dirty||(R.lock==o.id&&c.rev<=(R.lrev||0)))return;
+ try{const d=JSON.parse(c.d);norm(d);R.es=[{id:o.id,nome:c.nome,ano:c.ano,d}];R.lock=o.id;R.cur=o.id;R.lrev=c.rev;S=d;draft=null;delete HST[R.cur];localSave();setCs("☁️ Sincronizado às "+hora());render()}catch(e){}},()=>setCs("⚠️ Sem acesso à nuvem"))}
+function watchA(){DB.collection("escolas").onSnapshot(sn=>{CL={};sn.docs.forEach(d=>{const c=d.data();if(c&&!c.sid)CL[d.id]=c});adminSync();const a=document.activeElement;if(!(R.pin&&!unl)&&!(a&&/INPUT|TEXTAREA|SELECT/.test(a.tagName)))render()},()=>{})}
+function adminSync(){if(!bkOk)return;for(const x of R.es){const c=CL[x.id];if(!c||c.by==="admin"||c.rev<=(x.brev||0))continue;if(aSch===x.id||bkSig(x)!==BKH[x.id]){x.pendC=c.rev;continue}applyCloud(x,c)}}
+function applyCloud(x,c){try{const d=JSON.parse(c.d);norm(d);x.d=d;x.emails=c.emails||x.emails||[];x.brev=c.rev;delete x.pendC;BKH[x.id]=bkSig(x);if(R.cur==x.id){S=d;draft=null}delete HST[x.id];try{localStorage.setItem(KEY,JSON.stringify(R))}catch(e){}toast("Alterações dos colaboradores aplicadas: "+x.nome);render()}catch(e){}}
+/* backup online instantâneo do administrador (o mesmo documento da escola) */
+let bkT=null,bkOk=false,BKH={};
+const bkEmpty=x=>!x.d.turmas.length&&!x.d.profs.length;
+const sigOf=(n,a,d,m)=>JSON.stringify([n,a,d,(m.emails||[]).join(",")]);
+const bkSig=x=>sigOf(x.nome,x.ano,x.d,x);
+function bkTouch(){if(USER||!DB||!bkOk)return;clearTimeout(bkT);setCs("☁️ Salvando…");bkT=setTimeout(bkPush,1200)}
+async function bkPush(){try{for(const x of R.es){if(bkEmpty(x)&&!(x.emails||[]).length)continue;const sg=bkSig(x);if(BKH[x.id]===sg)continue;const rev=Date.now(),c=CL[x.id];
+ await DB.collection("escolas").doc(x.id).set({nome:x.nome,ano:x.ano,d:JSON.stringify(x.d),emails:x.emails||[],rev,by:"admin",at:rev,adm:aSch==x.id?aT:0});
+ if(c&&c.by!=="admin"&&c.rev>(x.brev||0))toast("Suas alterações prevaleceram sobre as dos colaboradores.");delete x.pendC;x.brev=rev;BKH[x.id]=sg}
+ try{localStorage.setItem(KEY,JSON.stringify(R))}catch(e){}setCs("☁️ Salvo na nuvem às "+hora())}catch(e){setCs("⚠️ Sem conexão com a nuvem")}}
+async function bkLoad(){try{const [a,b]=await Promise.all([DB.collection("escolas").get(),DB.collection("backup").get().catch(()=>({docs:[]}))]);
+ const docs=[],seen={};a.docs.forEach(dc=>{const c=dc.data();if(c&&!c.sid){seen[dc.id]=1;docs.push({id:dc.id,c,lg:false})}});b.docs.forEach(dc=>{if(!seen[dc.id])docs.push({id:dc.id,c:dc.data(),lg:true})});
+ let ch=false;const fin=()=>{if(!ch)return;if(!R.es.some(e=>e.id==R.cur))R.cur=R.es[0].id;S=ce().d;norm(S);delete HST[R.cur];try{localStorage.setItem(KEY,JSON.stringify(R))}catch(e){}render()};
+ for(const {id,c,lg} of docs){let x=R.es.find(e=>e.id==id),d;try{d=JSON.parse(c.d)}catch(e){continue}norm(d);const em=c.emails||[];
+  const cs=sigOf(c.nome,c.ano,d,{emails:em}),setB=()=>{if(!lg)BKH[id]=cs},take=()=>{if(x){x.nome=c.nome;x.ano=c.ano;x.d=d;x.emails=em;x.brev=c.rev}else{x={id,nome:c.nome,ano:c.ano,d,emails:em,brev:c.rev};R.es.push(x)}setB();ch=true};
+  if(!x||bkEmpty(x))take();
+  else if(x.brev){if(c.rev>x.brev)take();else setB()}
+  else if(bkSig(x)===cs){x.brev=c.rev;setB()}
+  else await new Promise(r=>ask("Há um backup na nuvem de "+c.nome+" ("+c.ano+"). Restaurar a versão da nuvem? Cancelar mantém a deste aparelho.",()=>{take();r()},"Restaurar"))}
+ fin();bkOk=true;adminSync();bkTouch()}catch(e){setCs("⚠️ Sem acesso ao backup na nuvem")}}
+/* colaboradores: pré-vínculo por e-mail e convite pelo Gmail do administrador */
+const cst=x=>{const n=(x.emails||[]).length;if(!n)return "";const c=CL[x.id];return `<br>👥 ${n} colaborador(es)${c?" · editado às "+hora(c.rev)+(c.by==="admin"?"":" por colaborador"):""}${x.pendC?" · <b>alterações aguardando</b>":""}`};
+const cbtn=x=>!DB?"":`<button class="btn g s" onclick="collabE('${x.id}')">Colaboradores</button>`;
+const invTxt=x=>`Olá! 👋
+
+Você foi convidado(a) para colaborar na montagem do horário da escola ${x.nome} (${x.ano}) no aplicativo EVA.
+
+📲 COMO ACESSAR
+1. Abra o link: ${ULINK}
+2. Toque em "Entrar com Google" e use ESTE Gmail (o mesmo que recebeu este convite).
+3. A escola ${x.nome} abre sozinha. Todos os colaboradores trabalham na mesma montagem, e tudo é salvo automaticamente.
+
+🔒 AVISOS
+• Você só vê e edita as escolas para as quais foi convidado(a).
+• Quando o administrador estiver editando, a edição fica bloqueada por um tempo e é liberada sozinha.
+
+Atenciosamente,
+Professor Rogerio Nascimento`;
+function inviteE(id,i){const x=R.es.find(e=>e.id==id),ems=i>=0?[x.emails[i]]:(x.emails||[]).slice();if(!ems.length||!ems[0])return;
+ const u="https://mail.google.com/mail/?view=cm&fs=1&authuser="+encodeURIComponent(ADMIN_EMAIL)+(i>=0?"&to="+encodeURIComponent(ems[0]):"&bcc="+encodeURIComponent(ems.join(",")))+"&su="+encodeURIComponent("Convite: horário escolar "+x.nome+" ("+x.ano+")")+"&body="+encodeURIComponent(invTxt(x));
+ window.open(u,"_blank","noopener");toast("Abrimos o seu Gmail com o convite. É só enviar.")}
+function collabE(id){const x=R.es.find(e=>e.id==id);x.emails=x.emails||[];let o=document.getElementById("cbm");if(o)o.remove();o=document.createElement("div");o.id="cbm";o.style.cssText="position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:50;display:grid;place-items:center;padding:16px";
+ o.innerHTML=`<div class="card" style="max-width:420px;width:100%;margin:0;max-height:90vh;overflow:auto"><h2>Colaboradores: ${esc(x.nome)}</h2><p class="hint">Todos trabalham na mesma montagem desta escola e o administrador prevalece. Adicione o Gmail de cada pessoa (pré-vínculo) e envie o convite pelo seu Gmail (${ADMIN_EMAIL}).</p>${x.emails.map((em,i)=>`<div class="pr"><div class="i"><b>${esc(em)}</b></div><button class="btn g s" onclick="inviteE('${x.id}',${i})">Convidar</button><button class="btn d s" onclick="rmEm('${x.id}',${i})">×</button></div>`).join("")||'<div class="empty">Nenhum colaborador ainda.</div>'}<label>Adicionar Gmail</label><input id="cbe" type="email" placeholder="nome@gmail.com" onkeydown="if(event.key=='Enter')addEm('${x.id}')"><div style="display:grid;gap:8px;margin-top:10px"><button class="btn" onclick="addEm('${x.id}')">Adicionar colaborador</button>${x.emails.length>1?`<button class="btn g" onclick="inviteE('${x.id}',-1)">Convidar todos</button>`:""}<button class="btn g" onclick="document.getElementById('cbm').remove();render()">Fechar</button></div></div>`;document.body.appendChild(o)}
+function addEm(id){const x=R.es.find(e=>e.id==id),v=(document.getElementById("cbe").value||"").trim().toLowerCase();if(!/^[^\s@]+@gmail\.com$/.test(v)){toast("Informe um e-mail @gmail.com válido.");return}x.emails=x.emails||[];if(x.emails.includes(v)){toast("Esse e-mail já está na lista.");return}x.emails.push(v);localSave();collabE(id);toast("Colaborador adicionado. Toque em Convidar.")}
+function rmEm(id,i){const x=R.es.find(e=>e.id==id);ask("Remover "+x.emails[i]+" desta escola?",()=>{x.emails.splice(i,1);localSave();collabE(id)},"Remover")}
+function chk(){if(USER)setBlk(!!LADM&&Date.now()-SEEN<6e4)}
+function setBlk(v){if(v===BLK)return;BLK=v;const m=document.getElementById("m");m.style.pointerEvents=v?"none":"";m.style.opacity=v?".6":"";toast(v?"O administrador começou a editar esta escola. Sua edição está bloqueada por enquanto.":"O administrador terminou. Sua edição foi liberada.");render()}
+function admOff(){clearTimeout(aI);if(USER||!DB||!aSch)return;const x=R.es.find(e=>e.id==aSch);aSch=null;if(x&&CL[x.id]&&(x.emails||[]).length)DB.collection("escolas").doc(x.id).update({adm:0}).catch(()=>{});adminSync()}
+function admTouch(){if(USER||!DB||(R.pin&&!unl))return;const x=ce();if(!x||!CL[x.id]||!(x.emails||[]).length)return;if(aSch&&aSch!==x.id)admOff();clearTimeout(aI);aI=setTimeout(admOff,9e4);if(aSch!==x.id||Date.now()-aT>2e4){aSch=x.id;aT=Date.now();DB.collection("escolas").doc(x.id).update({adm:aT}).catch(()=>{})}}
+function admPub(){}
+(async()=>{try{DB=await claude.use("db");if(!DB)return;if(USER){const U=await claude.use("user");UID=U&&U.id?await U.id():null;EM=U&&U.email?String(await U.email()||"").toLowerCase():"";if(UID&&EM)watchU();else setCs("Entre na sua conta para sincronizar")}else{watchA();bkLoad()}render()}catch(e){}})();
+document.addEventListener("pointerdown",admTouch);document.addEventListener("keydown",admTouch);window.addEventListener("pagehide",admOff);setInterval(chk,15000);
+document.addEventListener("visibilitychange",()=>{if(document.hidden)admOff();if(document.hidden&&USER&&R.lock&&dirty)submitC(true)});
+
+/* mensagem e link de 1 clique */
+const b64u=u=>{let t="";u.forEach(c=>t+=String.fromCharCode(c));return btoa(t).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"")};
+const unb64=t=>{t=t.replace(/-/g,"+").replace(/_/g,"/");while(t.length%4)t+="=";return Uint8Array.from(atob(t),c=>c.charCodeAt(0))};
+async function zip(str){const b=new TextEncoder().encode(str);try{const cs=new Blob([b]).stream().pipeThrough(new CompressionStream("gzip"));return "g"+b64u(new Uint8Array(await new Response(cs).arrayBuffer()))}catch(e){return "r"+b64u(b)}}
+async function unzip(tok){const u=unb64(tok.slice(1));if(tok[0]=="g"){const ds=new Blob([u]).stream().pipeThrough(new DecompressionStream("gzip"));return new TextDecoder().decode(await new Response(ds).arrayBuffer())}return new TextDecoder().decode(u)}
+async function hashLoad(){const h=location.hash;if(!/^#eva[gr]/.test(h))return;try{const t=await unzip(h.slice(4)),o=JSON.parse(t);if(R.lock){if(o.id&&o.id!==R.lock)toast("Este link é de outra escola. Você só pode editar a sua.");return}impBk(t)}catch(e){toast("Link inválido ou incompleto. Peça um novo link ao administrador.")}}
+if(USER)setTimeout(hashLoad,400);
+const msgTxt=(x,link,emb)=>`Olá${x.uname?", "+x.uname.split(" ")[0]:""}! 👋
+
+Você vai montar o horário da escola ${x.nome} (${x.ano}) no aplicativo EVA, direto no celular.
+
+📲 COMO ACESSAR
+1. Toque no link abaixo:
+${link}
+2. Toque em "Entrar com Google" e use o seu Gmail.
+3. ${emb?"A sua escola abre sozinha. Se aparecer \"Ativar seu acesso\", aguarde alguns segundos.":"A sua escola aparece sozinha. Se aparecer \"Ativar seu acesso\", avise o administrador."}
+
+✏️ COMO USAR
+• Turmas: confira as turmas e os turnos.
+• Professores: preencha o formulário de cada professor.
+• Horário: toque em Gerar horários.
+• Tudo é salvo automaticamente.
+
+🔒 AVISOS
+• Você só vê e edita a escola ${x.nome}.
+• Quando o administrador estiver editando, aparece um aviso e a edição fica bloqueada por um tempo. Ela é liberada sozinha.
+• Tudo é salvo na nuvem automaticamente, e todos os colaboradores da escola trabalham na mesma montagem.
+
+📱 DICA: deixe o EVA na tela inicial.
+iPhone: Safari > Compartilhar > Adicionar à Tela de Início.
+Android: Chrome > menu ⋮ > Instalar app.
+
+Qualquer dúvida, fale comigo. 🙂`;
+async function msgE(id,emb){const x=R.es.find(e=>e.id==id);if(emb===undefined)emb=!x.uid;let link=ULINK,nota="";
+ if(emb){const mk=d=>zip(JSON.stringify(Object.assign(pk(x),{tipo:"usuario",d})));let t=await mk(x.d);if(t.length>3500&&x.d.hor){t=await mk(Object.assign({},x.d,{hor:null,notes:[],list:[]}));nota=" O horário já gerado não foi incluído para encurtar o link; ele é gerado de novo em 1 clique."}link=ULINK+"#eva"+t}
+ const o=document.createElement("div");o.style.cssText="position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:50;display:grid;place-items:center;padding:16px";
+ o.innerHTML=`<div class="card" style="max-width:420px;width:100%;margin:0;max-height:90vh;overflow:auto"><h2>Mensagem: ${esc(x.nome)} (${x.ano})</h2><label class="ck" style="color:var(--tx)"><input type="checkbox" id="me" ${emb?"checked":""}>Embutir os dados da escola no link (1 clique)</label><p class="hint">${emb?"Link com "+link.length+" caracteres."+(link.length>3000?" Está longo: alguns aplicativos podem cortá-lo. Prefira o link curto com a nuvem.":"")+nota+" Quem tiver o link vê os dados desta escola.":(x.uid?"Link curto: a escola abre pela nuvem, pois o usuário está vinculado.":"Vincule o usuário para a escola abrir sozinha, ou marque a opção acima.")}</p><textarea id="mt" style="min-height:280px"></textarea><div style="display:grid;gap:8px;margin-top:10px"><button class="btn" id="mc">Copiar texto</button><button class="btn g" id="mx">Fechar</button></div></div>`;
+ document.body.appendChild(o);const ta=o.querySelector("#mt");ta.value=msgTxt(x,link,emb);
+ o.querySelector("#me").onchange=function(){o.remove();msgE(id,this.checked)};o.querySelector("#mx").onclick=()=>o.remove();
+ o.querySelector("#mc").onclick=()=>{ta.select();let ok=false;try{ok=document.execCommand("copy")}catch(e){}if(ok)toast("Texto copiado.");else if(navigator.clipboard)navigator.clipboard.writeText(ta.value).then(()=>toast("Texto copiado."),()=>toast("Selecione o texto e copie."));else toast("Selecione o texto e copie.")}}
+/* acesso */
+const hash=s=>{let h=5381;for(const c of String(s))h=((h*33)^c.charCodeAt(0))>>>0;return h};
+let unl=false;
+const lockV=()=>`<div class="card"><h2>Área do administrador</h2><p class="hint">Digite o PIN para ver as escolas.</p><label>PIN</label><input id="pn" type="password" inputmode="numeric" onkeydown="if(event.key=='Enter')unlock()"><div style="margin-top:14px"><button class="btn" onclick="unlock()">Entrar</button></div></div>`;
+const actV=()=>`<div class="card"><h2>Ativar seu acesso</h2>${UID?'<div class="ok">Conectado como ${EM}. Assim que o administrador incluir este Gmail como colaborador, a escola aparece aqui.</div>':''}<p class="hint">Peça ao administrador o arquivo da sua escola e importe aqui. Você só poderá editar essa escola.</p><label>Arquivo da escola</label><input type="file" accept=".json,application/json" onchange="impF(this.files[0])"><label>Ou cole o texto</label><textarea id="bk"></textarea><div style="margin-top:12px"><button class="btn" onclick="impBk(document.getElementById('bk').value)">Ativar acesso</button></div></div>`;
+function unlock(){if(hash(document.getElementById("pn").value)==R.pin){unl=true;render()}else toast("PIN incorreto.")}
+function setPin(){const v=document.getElementById("np").value.trim();if(v.length<4){toast("Use ao menos 4 dígitos.");return}R.pin=hash(v);unl=true;save();toast("PIN definido.");render()}
+function clrPin(){ask("Remover o PIN?",()=>{R.pin=null;save();render()},"Remover")}
+function render(){const g=!USER&&R.pin&&!unl?lockV():USER&&!R.lock?actV():null;
+ if(g){document.getElementById("tb").innerHTML="";document.getElementById("st").innerHTML="";document.getElementById("esn").textContent=USER?"Ative seu acesso":"Área restrita";document.getElementById("m").innerHTML=g;return}
+ render0()}
+/* escolas (administrador) */
+function vEsc(){const e=ce();return `<div class="card"><h2>Escola atual</h2><label>Nome da escola</label><input value="${esc(e.nome)}" oninput="ce().nome=this.value;save();hd()"><label>Ano letivo</label><input type="number" value="${e.ano}" oninput="ce().ano=+this.value;save();hd()"></div>
+<div class="card"><h2>Minhas escolas</h2>${R.es.map(x=>`<div class="pr"><div class="av2" style="background:var(--bs);color:var(--bl)">🏫</div><div class="i"><b>${esc(x.nome)}</b><small>${x.ano} · ${x.d.turmas.length} turmas · ${x.d.profs.length} professores${x.id==R.cur?" · aberta":""}${cst(x)}</small></div><div style="display:flex;gap:6px;flex-wrap:wrap;width:100%;justify-content:flex-end">${x.id==R.cur?"":`<button class="btn g s" onclick="openE('${x.id}')">Abrir</button>`}<button class="btn g s" onclick="msgE('${x.id}')">Mensagem</button>${cbtn(x)}<button class="btn g s" onclick="bkE('${x.id}')">Backup</button><button class="btn g s" onclick="pkUE('${x.id}')">Arquivo do usuário</button><button class="btn g s" onclick="dupE('${x.id}')">Novo ano</button><button class="btn d s" onclick="delE('${x.id}')">Excluir</button></div></div>`).join("")}</div>
+<div class="card"><h2>Nova escola</h2><p class="hint">Cada escola tem turmas, professores e horários separados.</p><label>Nome da escola</label><input id="en" placeholder="Ex.: Escola Municipal Aurora"><label>Ano letivo</label><input id="ea" type="number" value="${new Date().getFullYear()}"><div style="margin-top:14px"><button class="btn" onclick="addE()">Criar escola</button></div></div>
+<div class="card"><h2>Colaboradores e acesso</h2><p class="hint">1) Em <b>Colaboradores</b>, na escola, adicione o Gmail de cada pessoa (pré-vínculo). 2) Toque em <b>Convidar</b>: abre o seu Gmail (${ADMIN_EMAIL}) com a mensagem pronta; é só enviar. 3) A pessoa abre o link e entra com esse Gmail. Todos trabalham na mesma montagem da escola, e o administrador prevalece.</p><textarea readonly onfocus="this.select()" style="min-height:50px">${ULINK}</textarea></div>
+<div class="card"><h2>PIN do administrador</h2><p class="hint">Com PIN, só quem sabe o código vê todas as escolas neste aparelho. Não compartilhe o link do administrador.</p>${R.pin?`<div class="ok">PIN ativo</div><div style="margin-top:10px"><button class="btn d" onclick="clrPin()">Remover PIN</button></div>`:`<input id="np" type="password" inputmode="numeric" placeholder="PIN com 4 ou mais dígitos"><div style="margin-top:10px"><button class="btn" onclick="setPin()">Definir PIN</button></div>`}</div>`}
+const sw=id=>{R.cur=id;S=ce().d;norm(S);draft=null;view.k="";save()};
+function openE(id){sw(id);go("cfg")}
+function addE(){const n=document.getElementById("en").value.trim();if(!n){toast("Informe o nome da escola.");return}const id="e"+Date.now();R.es.push({id,nome:n,ano:+document.getElementById("ea").value||new Date().getFullYear(),d:blank()});sw(id);go("cfg")}
+function dupE(id){const x=R.es.find(e=>e.id==id),n="e"+Date.now(),d=JSON.parse(JSON.stringify(x.d));d.hor=null;d.fail=0;d.notes=[];R.es.push({id:n,nome:x.nome,ano:x.ano+1,d,emails:(x.emails||[]).slice()});sw(n);go("esc");toast("Criada a escola de "+(x.ano+1)+".")}
+function delE(id){const x=R.es.find(e=>e.id==id);ask("Excluir "+x.nome+" ("+x.ano+") e todos os seus dados?",()=>{if(DB&&!USER){DB.collection("backup").doc(id).delete().catch(()=>{});DB.collection("escolas").doc(id).delete().catch(()=>{})}R.es=R.es.filter(e=>e.id!=id);if(!R.es.length)R.es.push({id:"e"+Date.now(),nome:"Minha escola",ano:new Date().getFullYear(),d:blank()});if(R.cur==id||!R.es.some(e=>e.id==R.cur))R.cur=R.es[0].id;S=ce().d;norm(S);draft=null;view.k="";save();render();toast("Escola excluída.")},"Excluir")}
+/* backup por escola */
+const pk=x=>({eva:1,id:x.id,nome:x.nome,ano:x.ano,d:x.d});
+async function dlFile(nm,obj){try{const dl=await claude.use("downloads");if(!dl)throw 0;await dl.save({filename:nm.replace(/[\\/:*?"<>|]/g,"")+".json",data:JSON.stringify(obj)});return 1}catch(e){if(!(e&&e.code=="declined"))toast("Não foi possível salvar o arquivo aqui.")}}
+async function bkE(id){const x=R.es.find(e=>e.id==id);if(await dlFile("EVA - "+x.nome+" - "+x.ano,pk(x))){x.bk=Date.now();save();render()}}
+async function pkUE(id){const x=R.es.find(e=>e.id==id);await dlFile("EVA Usuário - "+x.nome+" - "+x.ano,Object.assign(pk(x),{tipo:"usuario"}))}
+const saveBk=()=>bkE(R.cur);
+function impBk(t){try{const o=JSON.parse(t),n=o.d?o:{nome:"Escola importada",ano:new Date().getFullYear(),d:o};if(!n.d||!n.d.cfg||!n.d.turmas||!n.d.profs)throw 0;if(n.d.cfg.i===undefined)n.d.cfg.i=0;norm(n.d);
+ if(USER){if(!R.lock){const id=n.id||"e"+Date.now();R.lock=id;R.es=[{id,nome:n.nome,ano:n.ano,d:n.d}];sw(id);toast("Acesso ativado: "+n.nome);go("cfg");return}
+  if(n.id!=R.lock){toast("Este arquivo é de outra escola. Você só pode editar a sua.");return}
+  ask("Substituir os dados da sua escola pelo arquivo?",()=>{ce().d=n.d;sw(R.lock);toast("Backup restaurado.");go("cfg")},"Substituir");return}
+ const x=R.es.find(e=>n.id?e.id==n.id:(e.nome==n.nome&&e.ano==n.ano));
+ if(x)ask("Substituir os dados de "+x.nome+" "+x.ano+" pelo arquivo?",()=>{x.nome=n.nome;x.ano=n.ano;x.d=n.d;sw(x.id);toast("Escola atualizada.");go("cfg")},"Substituir");
+ else{const id=n.id||"e"+Date.now();R.es.push({id,nome:n.nome,ano:n.ano,d:n.d});sw(id);toast("Escola importada.");go("cfg")}
+}catch(e){toast("Arquivo inválido. Use um arquivo salvo pelo EVA.")}}
+function impF(f){if(!f)return;const r=new FileReader();r.onload=()=>impBk(r.result);r.readAsText(f)}
+function vBk(){const e=ce(),dt=e.bk?new Date(e.bk).toLocaleDateString("pt-BR"):null;
+return `${USER?`<div class="card"><h2>Nuvem</h2><p class="hint">Suas alterações são salvas na nuvem automaticamente. Todos os colaboradores da escola trabalham na mesma montagem, e o administrador prevalece. Você também pode salvar agora.</p><button class="btn" onclick="submitC(false)">Salvar agora na nuvem</button></div>`:""}<div class="card"><h2>Backup desta escola</h2><p class="hint">${esc(e.nome)} · ${e.ano}<br>Arquivo: <b>EVA - ${esc(e.nome)} - ${e.ano}.json</b></p>${dt?`<div class="ok">Último backup salvo em ${dt}</div>`:`<div class="warn">Nenhum backup salvo ainda.</div>`}<div style="margin-top:12px"><button class="btn" onclick="saveBk()">Salvar backup agora</button></div><p class="hint" style="margin-top:10px">${USER?"Depois de salvar, envie o arquivo ao administrador.":"Na tela de salvar, escolha o Google Drive. Cada escola tem o seu arquivo."}</p></div>
+<div class="card"><h2>Restaurar backup</h2><p class="hint">${USER?"Só aceita arquivos da sua escola.":"Se a escola já existir, ela é atualizada; senão, é criada."}</p><label>Arquivo do backup</label><input type="file" accept=".json,application/json" onchange="impF(this.files[0])"><label>Ou cole o texto</label><textarea id="bk"></textarea><div style="margin-top:12px"><button class="btn g" onclick="impBk(document.getElementById('bk').value)">Importar texto</button></div></div>
+<div class="card"><h2>Instalar o EVA</h2><p class="hint"><b>iPhone:</b> Safari, botão Compartilhar, Adicionar à Tela de Início.<br><b>Android:</b> Chrome, menu ⋮, Instalar app ou Adicionar à tela inicial.</p></div>`}
+function vCfg(){const c=S.cfg;
+ return `<div class="card"><h2>Semana letiva</h2><div class="row"><div><label>Dias de aula</label><select onchange="S.cfg.d=+this.value;save()">${[5,6].map(n=>`<option value="${n}" ${c.d==n?"selected":""}>${n} dias</option>`).join("")}</select></div><div><label>Aulas por dia (demais turmas)</label><select onchange="S.cfg.p=+this.value;save();render()">${[3,4,5,6,7,8].map(n=>`<option ${c.p==n?"selected":""}>${n}</option>`).join("")}</select></div></div>
+ <div class="row"><div><label>Fundamental (6º ao 9º)</label><select onchange="S.cfg.pf=+this.value;S.hor=null;save();render()">${[3,4,5,6,7,8].map(n=>`<option ${c.pf==n?"selected":""}>${n}</option>`).join("")}</select></div><div><label>Turmas da noite</label><select onchange="S.cfg.pn=+this.value;S.hor=null;save();render()">${[3,4,5,6,7,8].map(n=>`<option ${c.pn==n?"selected":""}>${n}</option>`).join("")}</select></div></div><p class="hint">Regra da montagem: o fundamental tem ${c.pf} aulas por dia e a noite ${c.pn}. Turmas com "EJA" no nome contam como noite e ensino médio, com ${c.pn} aulas. O app não usa horários além disso nessas turmas.</p>
+ <label style="margin-top:18px">Horários dos turnos</label><p class="hint">Aulas de ${c.du} min e intervalo de ${c.ivd} min. Informe o início de cada turno e depois de qual aula fica o intervalo.</p>${TK.map(k=>`<div class="row" style="margin-top:8px"><div><label>${TI[k]} ${TN[k]}: início</label><input type="time" value="${c.ini[k]}" onchange="S.cfg.ini['${k}']=this.value||S.cfg.ini['${k}'];save();render()"></div><div><label>Intervalo após a</label><select onchange="S.cfg.iv['${k}']=+this.value;S.hor=null;save();render()"><option value="0" ${!c.iv[k]?"selected":""}>sem intervalo</option>${[1,2,3,4,5,6,7].map(j=>`<option value="${j}" ${c.iv[k]==j?"selected":""}>${j}ª aula</option>`).join("")}</select></div></div>`).join("")}
+  <div class="row" style="margin-top:8px"><div><label>Duração da aula (min)</label><input type="number" min="30" max="90" value="${c.du}" onchange="S.cfg.du=+this.value||50;save();render()"></div><div><label>Duração do intervalo (min)</label><input type="number" min="5" max="60" value="${c.ivd}" onchange="S.cfg.ivd=+this.value||20;save();render()"></div></div>
+  <p class="hint">${TK.filter(k=>S.turmas.some(t=>S.tur[t]==k)).map(k=>TI[k]+" "+TN[k]+": "+hm(tmin(k))+" às "+hm(endT(k))).join(" · ")}</p></div>
+ <div class="card"><h2>Turmas</h2><label>Nome da turma</label><input id="nt" placeholder="Ex.: 6º A" onkeydown="if(event.key=='Enter')addT()">
+ <div class="row" style="margin-top:10px"><div><select id="ntn" onchange="lastTn=this.value">${TK.map(k=>`<option value="${k}" ${lastTn==k?"selected":""}>${TI[k]} ${TN[k]}</option>`).join("")}</select></div><div><select id="ntl"><option value="">Nível: automático</option><option value="F">Fundamental</option><option value="O">Médio / outros</option></select></div><button class="btn s" style="flex:none" onclick="addT()">Adicionar</button></div>
+ <div class="chips">${S.turmas.map((t,i)=>`<span class="chip">${esc(t)} · ${TN[S.tur[t]]} · ${ppd(t)} aulas<i onclick="delT(${i})">×</i></span>`).join("")||'<div class="empty">Nenhuma turma ainda. Adicione a primeira.</div>'}</div></div>
+ <button class="btn" onclick="go('prof')">Continuar: professores</button>`}
+function addT(){const v=document.getElementById("nt").value.trim();if(v&&!S.turmas.includes(v)){S.turmas.push(v);S.tur[v]=isEJA(v)?"N":lastTn;S.niv[v]=document.getElementById("ntl").value||(isFund(v)?"F":"O");S.hor=null;save()}render()}
+function delT(i){delete S.tur[S.turmas[i]];S.turmas.splice(i,1);S.hor=null;save();render()}
+const nd1=()=>({turmas:[],disc:"",aulas:2,dup:false});
+const nd=()=>({id:Date.now()+"",nome:"",email:"",max:5,off:{},agr:false,ef:false,dv:"",dias:[],dem:[nd1()]});
+function vProf(){
+ if(!S.turmas.length)return `<div class="card"><h2>Comece pelas turmas</h2><p class="hint">O formulário usa as turmas cadastradas.</p><button class="btn" onclick="go('cfg')">Cadastrar turmas</button></div>`;
+ if(!draft)draft=nd();const d=draft,D=S.cfg.d,P=S.cfg.p,I=S.cfg.i;
+ const gr=tn=>{let g=`<div class="tn">${TI[tn]} ${TN[tn]}</div><div class="sc"><table><tr><th></th>${DN.slice(0,D).map(x=>`<th>${x}</th>`).join("")}</tr>`;
+  const PN=Pn(tn);for(let p=0;p<PN;p++){g+=`<tr>${thT(tn,p)}${Array.from({length:D},(_,i)=>{const o=d.off[tn+i+"-"+p];return `<td><button class="av ${o?"off":""}" onclick="tg('${tn+i}-${p}')">${o?"✕":"✓"}</button></td>`}).join("")}</tr>`;
+   if(IV(tn)==p+1&&p<PN-1)g+=intT(tn,D+1)}
+  return g+`</table></div>`};
+ const used=TK.filter(k=>S.turmas.some(t=>S.tur[t]==k));
+ const dem=d.dem.map((x,i)=>`<div class="dm"><div class="row"><div><input placeholder="Disciplina (ex.: Matemática)" value="${esc(x.disc)}" oninput="draft.dem[${i}].disc=this.value"></div></div><div class="hint" style="margin-top:8px">Turmas desta disciplina <a href="#" onclick="allT(${i});return false" style="color:var(--bl);font-weight:700">marcar todas</a></div><div class="chips" style="margin:6px 0 10px">${S.turmas.map((t,j)=>`<span class="chip tg ${x.turmas.includes(t)?"on":""}" onclick="toggleT(${i},${j})">${x.turmas.includes(t)?"✓ ":""}${esc(t)} ${TI[S.tur[t]]}</span>`).join("")}</div>
+ <div class="row"><div><input type="number" min="1" max="${D*3}" value="${x.aulas}" oninput="draft.dem[${i}].aulas=+this.value" aria-label="Aulas por semana"></div><label class="ck" style="flex:1.6"><input type="checkbox" ${x.dup?"checked":""} onchange="draft.dem[${i}].dup=this.checked">Aulas geminadas</label><button class="btn g" style="flex:none;width:auto" onclick="dupD(${i})">Duplicar</button><button class="btn d" style="flex:none;width:auto" onclick="rmD(${i})">Remover</button></div></div>`).join("");
+ return `<div class="card"><h2>${S.profs.some(p=>p.id==d.id)?"Editar professor":"Formulário do professor"}</h2>
+ <label>Nome completo</label><input value="${esc(d.nome)}" oninput="draft.nome=this.value" placeholder="Ex.: Maria Souza"><label>Cor do professor no horário</label><input type="color" value="${d.cor||PAL[S.profs.length%PAL.length]}" oninput="draft.cor=this.value" style="height:46px;padding:4px"><label class="ck" style="color:var(--tx);margin-top:16px"><input type="checkbox" ${d.ef?"checked":""} onchange="draft.ef=this.checked">Vínculo efetivo</label><label>Data de vínculo (início na rede)</label><input type="date" value="${esc(d.dv||"")}" onchange="draft.dv=this.value"><p class="hint">Efetivos têm prioridade sobre os demais. Dentro de cada grupo, a data de vínculo mais antiga vem primeiro. Essa ordem define a prioridade na montagem do horário.</p>
+ <div class="row"><div><label>E-mail (opcional)</label><input type="email" value="${esc(d.email)}" oninput="draft.email=this.value"></div><div><label>Máx. aulas/dia por turno</label><input type="number" min="1" max="${P}" value="${d.max}" oninput="draft.max=+this.value"></div></div>
+ <label>Disciplinas, turmas e aulas por semana em cada turma. Use Duplicar para copiar a disciplina para outras turmas.</label>${dem}<button class="btn g" onclick="addD()">+ Outra disciplina</button>
+ <label>Preferência de dias</label><label class="ck" style="color:var(--tx)"><input type="checkbox" ${d.agr?"checked":""} onchange="draft.agr=this.checked;render()">Concentrar minhas aulas nos mesmos dias (útil para quem trabalha em mais de um turno)</label>
+ ${d.agr?`<div class="hint">Escolha os dias desejados. Sem escolha, o app usa o menor número de dias possível. A antiguidade define quem é atendido primeiro.</div><div class="chips" style="margin:8px 0">${DN.slice(0,D).map((n,i)=>`<span class="chip tg ${d.dias.includes(i)?"on":""}" onclick="tgDia(${i})">${d.dias.includes(i)?"✓ ":""}${n}</span>`).join("")}</div>`:""}
+ <label>Disponibilidade: toque nos horários em que NÃO pode lecionar</label>${used.map(gr).join("")}
+ <div style="display:grid;gap:10px;margin-top:16px"><button class="btn" onclick="saveP()">Salvar professor</button><button class="btn g" onclick="draft=null;render()">Limpar formulário</button></div></div>
+ <div class="card"><h2>Ordem de antiguidade</h2><p class="hint">Ordem automática: efetivos primeiro; depois, a data de vínculo mais antiga. O 1º tem prioridade na montagem. As setas só desempatam professores com o mesmo vínculo e a mesma data.</p>${S.profs.map((p,k)=>`<div class="pr"><div style="display:flex;flex-direction:column;gap:2px;flex:none"><button class="btn g s" style="padding:2px 9px" onclick="mv(${k},-1)" aria-label="Subir" ${tieP(k,k-1)?"":"disabled"}>▲</button><button class="btn g s" style="padding:2px 9px" onclick="mv(${k},1)" aria-label="Descer" ${tieP(k,k+1)?"":"disabled"}>▼</button></div><div class="av2" style="background:${p.cor};color:${tx(p.cor)}">${k+1}º</div><div class="i"><b>${esc(p.nome)}</b><small>${p.ef?"Efetivo":"Não efetivo"}${p.dv?" · desde "+p.dv.split("-").reverse().join("/"):" · sem data de vínculo"}<br>${pl(p)} aulas · ${tns(p).map(x=>TN[x]).join(", ")||"sem turma"}${p.agr?" · concentra dias":""}</small></div><button class="btn g s" onclick="editP('${p.id}')">Editar</button><button class="btn d s" onclick="delP('${p.id}')">×</button></div>`).join("")||'<div class="empty">Nenhum professor ainda.</div>'}</div>
+ ${S.profs.length?`<button class="btn" onclick="go('gen')">Continuar: gerar horário</button>`:""}`}
+function tg(k){draft.off[k]=!draft.off[k];render()}
+function tgDia(i){const a=draft.dias,k=a.indexOf(i);k>=0?a.splice(k,1):a.push(i);render()}
+function addD(){draft.dem.push(nd1());render()}
+function toggleT(i,j){const t=S.turmas[j],a=draft.dem[i].turmas,k=a.indexOf(t);k>=0?a.splice(k,1):a.push(t);render()}
+function allT(i){const a=draft.dem[i];a.turmas=a.turmas.length==S.turmas.length?[]:S.turmas.slice();render()}
+function dupD(i){draft.dem.splice(i+1,0,JSON.parse(JSON.stringify(draft.dem[i])));render()}
+function rmD(i){draft.dem.splice(i,1);if(!draft.dem.length)draft.dem.push(nd1());render()}
+const tieP=(i,j)=>!!S.profs[j]&&!!S.profs[i].ef===!!S.profs[j].ef&&(S.profs[i].dv||"")===(S.profs[j].dv||"");
+function mv(k,s){const j=k+s;if(j<0||j>=S.profs.length)return;if(!tieP(k,j)){toast("A ordem segue o vínculo efetivo e a data de vínculo. As setas só desempatam quem tem o mesmo vínculo e a mesma data.");return}[S.profs[k],S.profs[j]]=[S.profs[j],S.profs[k]];S.hor=null;save();render()}
+function saveP(){const d=draft;if(!d.nome.trim()){alert("Informe o nome do professor.");return}
+ d.dem=d.dem.filter(x=>x.turmas.length&&x.disc.trim()&&x.aulas>0);
+ if(S.profs.some(p=>p.id!=d.id&&p.nome.trim().toLowerCase()==d.nome.trim().toLowerCase())){alert("Já existe um professor com esse nome. Edite-o e adicione a outra disciplina nele.");return}
+ if(!d.dem.length){alert("Preencha ao menos uma turma, disciplina e número de aulas.");return}
+ if(!d.cor)d.cor=PAL[S.profs.length%PAL.length];const i=S.profs.findIndex(p=>p.id==d.id);i>=0?S.profs[i]=d:S.profs.push(d);ordP(S);S.hor=null;save();draft=null;render();scrollTo(0,0)}
+function editP(id){draft=JSON.parse(JSON.stringify(S.profs.find(p=>p.id==id)));render();scrollTo(0,0)}
+function delP(id){ask("Excluir este professor?",()=>{S.profs=S.profs.filter(p=>p.id!=id);S.hor=null;save();render()},"Excluir")}
+/* Gerador: 3 turnos, antiguidade e concentração de dias */
+function generate(){
+ const D=S.cfg.d,P=S.cfg.p,I=S.cfg.i,dems=[];
+ S.profs.forEach((p,r)=>{const q=Object.assign({},p,{id:p.nome.trim().toLowerCase()});p.dem.forEach(x=>x.turmas.forEach(t=>{if(S.turmas.includes(t))dems.push({p:q,r,t,tn:S.tur[t],disc:x.disc.trim(),n:+x.aulas,dup:x.dup})}))});
+ const ptn={};dems.forEach(x=>(ptn[x.p.id]=ptn[x.p.id]||new Set()).add(x.tn));dems.forEach(x=>dcol(x.disc));const av=(p,tn)=>{let c=0;for(let d=0;d<D;d++)for(let s=0;s<P;s++)if(!p.off[tn+d+"-"+s])c++;return c};
+ let best=null;
+ for(let it=0;it<400&&(!best||best.fail>0||it<150);it++){
+  const res={},busy={},load={},use={},pos={},tpos={},dt={},fail=[];S.turmas.forEach(t=>res[t]={});
+  const ord=dems.map(x=>({x,k:x.r*1000+av(x.p,x.tn)/x.n-(x.dup?2:0)+Math.random()*5})).sort((a,b)=>a.k-b.k).map(o=>o.x);
+  for(const x of ord){
+   const pid=x.p.id,tn=x.tn,Pt=ppd(x.t),cnt={},ok=(d,s)=>{const k=d+"-"+s;return s<Pt&&!x.p.off[tn+k]&&!res[x.t][k]&&!busy[pid+tn+k]};
+   const put=(d,s)=>{const k=d+"-"+s;res[x.t][k]={disc:x.disc,prof:x.p.nome};busy[pid+tn+k]=1;load[pid+tn+d]=(load[pid+tn+d]||0)+1;cnt[d]=(cnt[d]||0)+1;(use[pid]=use[pid]||{})[d]=1;(pos[pid+tn+d]=pos[pid+tn+d]||[]).push(s);(tpos[x.t+d]=tpos[x.t+d]||[]).push(s);(dt[pid+d]=dt[pid+d]||{})[tn]=1};
+   const bias=d=>{if(!x.p.agr)return 0;const u=use[pid]||{},pf=x.p.dias||[];let b=0;if(pf.length&&!pf.includes(d))b+=500;if(Object.keys(u).length)b+=u[d]?-30:40;return b};
+   const mx=x.p.max||P,ld=d=>load[pid+tn+d]||0;let rem=x.n;
+   const mt=ptn[pid],ei=TK.indexOf(tn),hasL=TK.slice(ei+1).some(k=>mt.has(k)),hasE=TK.slice(0,ei).some(k=>mt.has(k));
+   const pen=(d,sl)=>{const a=pos[pid+tn+d]||[],o=dt[pid+d]||{},near=(hasL&&TK.slice(ei+1).some(k=>o[k]))||(hasE&&TK.slice(0,ei).some(k=>o[k])),w=near?10:4,e=sl[0],f=sl[sl.length-1];let v=a.length?gd(a,sl)*25:0;v+=hasL&&!hasE?(Pt-1-f)*w:hasE&&!hasL?e*w:Math.min(e,Pt-1-f)*5;const b=tpos[x.t+d]||[];return v+(b.length?gd(b,sl)*12:e*2)};
+   while(rem>0){
+    let pick=null,bs=1e9;
+    if(x.dup&&rem>=2){
+     for(let d=0;d<D;d++)for(let s=0;s<Pt-1;s++){
+      if(s+1==IV(tn)||!ok(d,s)||!ok(d,s+1)||ld(d)+2>mx||(cnt[d]||0)>0)continue;
+      const sc=Math.random()*6+ld(d)*1.5+bias(d)+pen(d,[s,s+1]);if(sc<bs){bs=sc;pick={d,s,two:1}}}
+    }
+    if(!pick)for(let d=0;d<D;d++)for(let s=0;s<Pt;s++){
+     if(!ok(d,s)||ld(d)>=mx)continue;
+     const c=cnt[d]||0,sc=c*(c>=2?100:10)+ld(d)*1.5+Math.random()*6+bias(d)+pen(d,[s]);
+     if(sc<bs){bs=sc;pick={d,s}}}
+    if(!pick){fail.push(x);rem--;continue}
+    put(pick.d,pick.s);if(pick.two){put(pick.d,pick.s+1);rem-=2}else rem--;
+   }
+  }
+  let cost=fail.reduce((a,x)=>a+1000+(S.profs.length-x.r),0);
+  for(const k in pos)cost+=gaps(pos[k])*10;for(const k in tpos)cost+=gaps(tpos[k])*4;
+  for(const q in ptn)for(let d=0;d<D;d++)for(let e=0;e<2;e++){const a=pos[q+TK[e]+d],b=pos[q+TK[e+1]+d];if(a&&b)cost+=(P-1-Math.max(...a)+Math.min(...b))*6}
+  S.profs.forEach(p=>{if(p.agr){const u=Object.keys(use[p.nome.trim().toLowerCase()]||{}).map(Number),pf=p.dias||[];cost+=u.length*8+u.filter(d=>pf.length&&!pf.includes(d)).length*60}});
+  if(!best||cost<best.cost)best={res,cost,use,jan:Object.values(pos).reduce((a,v)=>a+gaps(v),0),fail:fail.length,list:fail.map(x=>x.p.nome+": "+x.disc+" ("+x.t+")")};
+ }
+ S.notes=S.profs.filter(p=>p.agr).map(p=>{const u=Object.keys(best.use[p.nome.trim().toLowerCase()]||{}).map(Number).sort(),pf=p.dias||[],out=pf.length&&u.some(d=>!pf.includes(d));return p.nome+": "+(u.map(d=>DN[d]).join(", ")||"sem aulas")+(out?" (parte fora dos dias preferidos)":"")});
+ S.jan=best.jan;S.hor=best.res;S.fail=best.fail;S.list=best.list;save();render()}
+function tbl(f,P0,tn){const D=S.cfg.d,P=P0||S.cfg.p,I=IV(tn);let h=`<div class="sc"><table><tr><th></th>${DN.slice(0,D).map(x=>`<th>${x}</th>`).join("")}</tr>`;
+ for(let s=0;s<P;s++){h+=`<tr>${thT(tn,s)}`;for(let d=0;d<D;d++){const c=f(d+"-"+s);h+=`<td>${c?`<div class="cell" style="${cstyle(c)}"><b>${esc(c.disc)}</b><br>${esc(c.prof)}</div>`:""}</td>`}h+=`</tr>`;if(I==s+1&&s<P-1)h+=intT(tn,D+1)}
+ return h+`</table></div>`}
+const DNL=["Segunda","Terça","Quarta","Quinta","Sexta","Sábado"];
+function tbn(tn,dsel){const D=S.cfg.d,I=IV(tn),P=Pn(tn),ts=S.turmas.filter(t=>S.tur[t]==tn);let h="";
+ for(let d=0;d<D;d++){if(dsel!="a"&&+dsel!=d)continue;
+  h+=`<div class="tn">${DNL[d]}</div><div class="sc"><table><tr><th></th>${ts.map(t=>`<th>${esc(t)}</th>`).join("")}</tr>`;
+  for(let s=0;s<P;s++){h+=`<tr>${thT(tn,s)}`;
+   for(const t of ts){const off=s>=ppd(t),c=off?null:S.hor[t]?.[d+"-"+s];
+    h+=`<td>${off?`<div class="cell" style="background:var(--ln);color:var(--mt);opacity:.5;display:grid;place-items:center">—</div>`:c?`<div class="cell" style="${cstyle(c)}"><b>${esc(c.disc)}</b><br>${esc(c.prof)}</div>`:""}</td>`}
+   h+=`</tr>`;if(I==s+1&&s<P-1)h+=intT(tn,ts.length+1)}
+  h+=`</table></div>`}
+ return h}
+function resumoN(tn){const m={};S.turmas.filter(t=>S.tur[t]==tn).forEach(t=>Object.values(S.hor[t]||{}).forEach(c=>{const o=m[c.prof]||(m[c.prof]={d:{},n:0});o.d[c.disc]=(o.d[c.disc]||0)+1;o.n++}));
+ const nm=S.profs.map(p=>p.nome).filter(n=>m[n]);
+ return `<h2 style="margin-top:18px">Professores e disciplinas</h2>`+(nm.map(n=>`<div class="pr"><div class="av2" style="background:${pcol(n)};color:${tx(pcol(n))}">${esc(n[0]||"?")}</div><div class="i"><b>${esc(n)}</b><small>${Object.entries(m[n].d).map(([k,v])=>esc(k)+" ("+v+")").join(", ")} · ${m[n].n} aulas</small></div></div>`).join("")||'<div class="empty">Sem aulas neste turno.</div>')}
+function vGen(){
+ if(!S.turmas.length||!S.profs.length)return `<div class="card"><h2>Faltam dados</h2><p class="hint">Cadastre turmas e ao menos um professor para gerar o horário.</p></div>`;
+ let h=`<div class="card"><h2>Gerar horários</h2><p class="hint">Monta manhã, tarde e noite de uma vez. Professores mais antigos escolhem primeiro. Ninguém fica em duas turmas no mesmo horário. Quem pediu concentração de dias tem os turnos encaixados nos mesmos dias.</p><div style="margin-top:12px"><button class="btn" onclick="generate()">${S.hor?"Gerar novamente":"✨ Gerar horários"}</button></div>`;
+ if(S.hor){h+=S.fail?`<div class="warn"><b>${S.fail} aula(s) sem lugar.</b> Libere horários ou reduza a carga:<br>${(S.list||[]).map(esc).join("<br>")}</div>`:`<div class="ok">Horários completos, sem choques.</div>`;
+  h+=`<div class="ok">Janelas entre aulas dos professores: <b>${S.jan||0}</b></div>`;if((S.notes||[]).length)h+=`<div class="ok"><b>Dias concentrados</b><br>${S.notes.map(esc).join("<br>")}</div>`}
+ h+=`</div>`;if(!S.hor)return h;
+ const opts=view.m=="t"?S.turmas:view.m=="n"?TK.filter(k=>S.turmas.some(t=>S.tur[t]==k)):S.profs.map(p=>p.nome);
+ if(!opts.includes(view.k))view.k=opts[0];
+ h+=`<div class="card"><div class="row np"><div><label>Ver por</label><select onchange="view.m=this.value;view.k='';render()"><option value="t" ${view.m=="t"?"selected":""}>Turma</option><option value="p" ${view.m=="p"?"selected":""}>Professor (todos os turnos)</option><option value="n" ${view.m=="n"?"selected":""}>Turno (visão geral)</option></select></div><div><label>${view.m=="t"?"Turma":view.m=="n"?"Turno":"Professor"}</label><select onchange="view.k=this.value;render()">${opts.map(o=>`<option value="${esc(o)}" ${o==view.k?"selected":""}>${view.m=="n"?TI[o]+" "+TN[o]:esc(o)}${view.m=="t"?" · "+TN[S.tur[o]]:""}</option>`).join("")}</select></div></div><div class="row np" style="margin-top:8px"><div><label>Cores</label><select onchange="S.cm=this.value;save();render()"><option value="p" ${(S.cm||"p")=="p"?"selected":""}>Colorido por professor</option><option value="d" ${S.cm=="d"?"selected":""}>Colorido por disciplina</option><option value="b" ${S.cm=="b"?"selected":""}>Preto e branco</option></select></div>${view.m=="n"?`<div><label>Dia</label><select onchange="view.dy=this.value;render()"><option value="a" ${(view.dy||"a")=="a"?"selected":""}>Todos os dias</option>${DNL.slice(0,S.cfg.d).map((n,i)=>`<option value="${i}" ${view.dy==String(i)?"selected":""}>${n}</option>`).join("")}</select></div>`:""}</div><div class="hint" style="margin-top:12px">${esc(ce().nome)} · ${ce().ano}</div><h2 style="margin:4px 0 0">${view.m=="n"?TI[view.k]+" "+TN[view.k]:esc(view.k)}</h2>`;
+ if(view.m=="n")h+=tbn(view.k,view.dy||"a")+resumoN(view.k);else if(view.m=="t")h+=`<div class="tn">${TI[S.tur[view.k]]} ${TN[S.tur[view.k]]}</div>`+tbl(k=>S.hor[view.k]?.[k],ppd(view.k),S.tur[view.k]);
+ else{const p=S.profs.find(p=>p.nome==view.k);for(const tn of tns(p))h+=`<div class="tn">${TI[tn]} ${TN[tn]}</div>`+tbl(k=>{for(const t of S.turmas){const x=S.hor[t]?.[k];if(S.tur[t]==tn&&x&&x.prof==view.k)return{disc:x.disc,prof:t,pn:x.prof}}},Pn(tn),tn)}
+ return h+legend()+`<div style="margin-top:14px" class="np"><p class="hint">Para salvar em PDF, toque em Imprimir e escolha Salvar como PDF. As cores saem na impressão.</p><button class="btn g" onclick="prn()">Imprimir / salvar PDF</button></div></div>`}
+function vBak(){return `<div class="card"><h2>Backup</h2><p class="hint">Os dados ficam neste aparelho. Copie o texto abaixo para guardar ou levar a outro celular. Para importar, cole e toque em Importar.</p><textarea id="bk">${esc(JSON.stringify(S))}</textarea><div style="display:grid;gap:10px;margin-top:12px"><button class="btn" onclick="impB()">Importar dados</button><button class="btn d" onclick="if(confirm('Apagar tudo?')){S={cfg:{d:5,p:5,i:2},turmas:[],tur:{},profs:[],hor:null,fail:0};save();draft=null;go('cfg')}">Apagar tudo</button></div></div>
+ <div class="card"><h2>Instalar o EVA</h2><p class="hint"><b>iPhone:</b> Safari, botão Compartilhar, Adicionar à Tela de Início.<br><b>Android:</b> Chrome, menu ⋮, Instalar app ou Adicionar à tela inicial.</p></div>`}
+function impB(){try{const o=JSON.parse(document.getElementById("bk").value);if(!o.cfg||!o.turmas||!o.profs)throw 0;if(o.cfg.i===undefined)o.cfg.i=0;norm(o);S=o;save();draft=null;alert("Dados importados.");go("cfg")}catch(e){alert("Texto inválido. Cole exatamente o conteúdo exportado.")}}
+render();
+</script>
+</body>
+</html>
