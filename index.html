@@ -73,6 +73,24 @@ textarea{width:100%;min-height:110px;border:2px solid var(--ln);border-radius:14
 .tabs button.on{background:var(--yl);color:var(--yt);opacity:1}
 .hint{font-size:.85rem;color:var(--mt);margin:0 0 4px}
 @media print{.tabs,.top,.np{display:none!important}body{background:#fff}.app{padding:0}.card{box-shadow:none;border:0}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+
+#pv{display:none;flex-direction:column;width:281mm;height:192mm;overflow:hidden;color:#111;background:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;--tx:#111;--mt:#333;--ln:#cfd6d9;--bl:#135d75;box-sizing:border-box}
+#pv .pvh{display:flex;justify-content:space-between;align-items:center;gap:16px;border-bottom:3px solid #135d75;padding-bottom:8px;min-height:74px;flex:none}#pv .pvh>div:first-child{min-width:0;flex:1 1 auto}#pv .pvh>div:first-child>div{min-width:0}
+#pv .pvs{font-weight:800;line-height:1.1;color:#0c3f50}
+#pv .pvy{font-size:15px;font-weight:600;color:#333}
+#pv .pvr{text-align:right;flex:0 1 42%;max-width:42%}#pv .pvt{font-size:21px;font-weight:800;color:#111}#pv .pvu{font-size:12px;color:#444}
+#pv .pvb{flex:1;display:flex;align-items:center;justify-content:center;overflow:hidden;min-height:0}
+#pv .pvc{flex:none;width:max-content;transform-origin:center center}
+#pv .pvf{flex:none;border-top:2px solid #135d75;padding-top:6px;font-size:11px;color:#333;display:flex;justify-content:space-between;gap:14px;height:36px;line-height:1.35}
+#pv table{min-width:0;width:auto;border-collapse:separate;border-spacing:2px}
+#pv th{font-size:11px;color:#222;padding:2px 4px}#pv th small{font-size:9px;opacity:1}
+#pv td{vertical-align:top}
+#pv .cell{min-height:0;min-width:70px;padding:3px 5px;border-radius:5px;font-size:11px;line-height:1.15}
+#pv .int{background:#e3e8ea;color:#333;font-size:10px;padding:1px;border-radius:3px}
+#pv .pvq{table-layout:fixed;width:1040px;border-spacing:1px}#pv .pvq th{font-size:9px;padding:0 2px;white-space:nowrap}#pv .pvq th small{display:inline;font-size:8px}#pv .pvq td{padding:0;overflow:hidden}#pv .pvq .cell{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:9px;line-height:1.3;padding:1px 4px;min-width:0;border-radius:3px}#pv .pvq.dn .cell{font-size:8.5px}#pv .pvq.d2 .cell{font-size:8px;padding:1px 2px}#pv .pvg{font-size:9px;line-height:1.35;margin-top:6px;color:#222}#pv .pvq .pvo{background:#e3e8ea;color:#888;text-align:center}#pv .pvq .pvd{writing-mode:vertical-rl;transform:rotate(180deg);font-size:12px;font-weight:800;width:26px}#pv .pvq .int{font-size:8px;line-height:1.2}#pv .tn{font-size:14px;font-weight:800;margin:0 0 4px;color:#111}
+#pv .sc{overflow:visible;margin:0}
+#pv img.pvl{width:56px;height:56px;border-radius:22%;object-fit:cover}
+@media print{@page{size:A4 landscape;margin:8mm}html,body{background:#fff!important;height:auto!important;min-height:0!important;margin:0!important;padding:0!important}body::before{display:none!important}body>*:not(#pv){display:none!important}#pv{display:flex!important;page-break-inside:avoid;page-break-after:avoid}}
 </style>
 </head>
 <body>
@@ -139,7 +157,36 @@ function legend(){const m=S.cm||"p";if(m=="b")return "";let h='<div class="lg2">
  return h+"</div>"}
 function setPc(k,v){S.profs[k].cor=v;save();render()}
 function setDc(i,v){S.dcor[LD[i]]=v;save();render()}
-function prn(){try{window.print()}catch(e){alert("Não foi possível abrir a impressão aqui. Abra o EVA no navegador do aparelho e tente de novo.")}}
+const abrP=n=>{const w=String(n).trim().split(/\s+/);return w.length>1?w[0]+" "+w[w.length-1][0]+".":w[0]};
+function pvCodes(ds){const E={};ds.forEach(d=>E[d]=0);const SW=["DE","DA","DO","DAS","DOS","E"];
+ const cd=d=>{const w=d.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toUpperCase().split(/[^A-Z]+/).filter(x=>x&&!SW.includes(x));if(!w.length)return "?";return w.length>1?w.slice(0,-1).map(x=>x[0]).join("")+w[w.length-1].slice(0,2+E[d]):w[0].slice(0,3+E[d])};
+ for(let it=0;it<6;it++){const m={};ds.forEach(d=>{const c=cd(d);(m[c]=m[c]||[]).push(d)});let ch=false;for(const c in m)if(m[c].length>1)m[c].forEach(d=>{if(E[d]<5){E[d]++;ch=true}});if(!ch)break}
+ const o={};ds.forEach(d=>o[d]=cd(d));return o}
+function pvTurnoAll(tn){const D=S.cfg.d,I=IV(tn),P=Pn(tn),ts=S.turmas.filter(t=>S.tur[t]==tn),n=ts.length,ex=I>0&&I<P?1:0,mode=n<=10?0:n<=16?1:2,W=1050,w=Math.floor((W-26-64)/Math.max(n,1));
+ const ds=[...new Set(ts.flatMap(t=>Object.values(S.hor[t]||{}).map(c=>c.disc)))].sort((x,y)=>x.localeCompare(y,"pt")),cod=mode?pvCodes(ds):{};
+ const nm=c=>mode==2?String(c.prof).trim().split(/\s+/)[0]:abrP(c.prof),dn=c=>mode?cod[c.disc]:esc(c.disc);
+ let h=`<table class="pvq ${mode==1?"dn":mode==2?"d2":""}" style="width:${W}px"><colgroup><col style="width:26px"><col style="width:64px">${ts.map(()=>`<col style="width:${w}px">`).join("")}</colgroup><tr><th></th><th></th>${ts.map(t=>`<th>${esc(t)}</th>`).join("")}</tr>`;
+ for(let d=0;d<D;d++)for(let s=0;s<P;s++){
+  h+=`<tr>${s==0?`<th rowspan="${P+ex}" class="pvd">${DN[d]}</th>`:""}<th>${s+1}ª <small>${hm(slotT(tn,s))}</small></th>`;
+  for(const t of ts){const off=s>=ppd(t),c=off?null:S.hor[t]?.[d+"-"+s];h+=`<td>${off?`<div class="cell pvo">—</div>`:c?`<div class="cell" style="${cstyle(c)}"><b>${dn(c)}</b> ${esc(nm(c))}</div>`:""}</td>`}
+  h+=`</tr>`;if(I==s+1&&s<P-1)h+=`<tr><td class="int" colspan="${n+1}">intervalo ${hm(tmin(tn)+I*(S.cfg.du||50))}–${hm(slotT(tn,I))}</td></tr>`}
+ h+=`</table>`;if(mode)h+=`<div class="pvg" style="width:${W}px">${ds.map(d=>`<b>${cod[d]}</b> ${esc(d)}`).join(" &nbsp;·&nbsp; ")}</div>`;return h}
+function pvBuild(){const e=ce(),m=view.m,k=view.k,D=S.cfg.d;let ttl="",sub="",body="";
+ const faixa=tn=>TN[tn]+": "+hm(tmin(tn))+" às "+hm(endT(tn))+" · aulas de "+S.cfg.du+" min · intervalo de "+S.cfg.ivd+" min";
+ if(m=="t"){const tn=S.tur[k];ttl="Turma "+k+" · "+TI[tn]+" "+TN[tn];sub=faixa(tn);body=tbl(q=>S.hor[k]?.[q],ppd(k),tn)}
+ else if(m=="n"){const dsel=view.dy||"a",days=dsel=="a"?[...Array(D).keys()]:[+dsel];ttl="Visão geral do turno · "+TI[k]+" "+TN[k]+(dsel=="a"?"":" · "+DNL[+dsel]);sub=faixa(k);const cols=days.length<=2?days.length:Math.ceil(days.length/2);
+  body=dsel=="a"?pvTurnoAll(k):tbn(k,String(days[0]))}
+ else{const p=S.profs.find(q=>q.nome==k);ttl="Professor(a): "+k;sub=(p&&p.ef?"Vínculo efetivo":"Vínculo não efetivo")+(p&&p.dv?" desde "+p.dv.split("-").reverse().join("/"):"")+" · "+(p?pl(p):0)+" aulas por semana";
+  body=`<div style="display:flex;gap:22px;justify-content:center;align-items:flex-start;flex-wrap:wrap">${(p?tns(p):[]).map(tn=>`<div><div class="tn">${TI[tn]} ${TN[tn]}</div>${tbl(q=>{for(const t of S.turmas){const x=S.hor[t]?.[q];if(S.tur[t]==tn&&x&&x.prof==k)return{disc:x.disc,prof:t,pn:x.prof}}},Pn(tn),tn)}</div>`).join("")}</div>`}
+ const site=ULINK.replace(/^https?:\/\//,"");
+ return `<div class="pvh"><div style="display:flex;align-items:center;gap:14px"><img class="pvl" src="logo-eva.png" alt="" onerror="this.style.display='none'"><div><div class="pvs" style="font-size:${e.nome.length>46?20:e.nome.length>34?24:30}px">${esc(e.nome)}</div><div class="pvy">Ano letivo ${e.ano}</div></div></div><div class="pvr"><div class="pvt">${esc(ttl)}</div><div class="pvu">${esc(sub)}</div></div></div><div class="pvb"><div class="pvc">${body}</div></div><div class="pvf"><div><b>EVA</b> · Solução intuitiva para Horários Escolares<br>${esc(site)}</div><div style="text-align:right">Desenvolvido por Professor Rogerio Nascimento · @rogeriobhz<br>instagram.com/rogeriobhz · Emitido em ${new Date().toLocaleDateString("pt-BR")}</div></div>`}
+function pvFit(){const pv=document.getElementById("pv"),c=pv.querySelector(".pvc"),b=pv.querySelector(".pvb");if(!c||!b)return;
+ pv.style.cssText="display:flex;position:fixed;left:-99999px;top:0";c.style.transform="";
+ const w=c.offsetWidth,h=c.offsetHeight,bw=b.clientWidth,bh=b.clientHeight;
+ const sc=Math.min(bw/w,bh/h,2)*0.97;c.style.transform="scale("+(isFinite(sc)&&sc>0?sc:1)+")";pv.style.cssText=""}
+function prn(){try{if(!S.hor){toast("Gere o horário antes de imprimir.");return}const pv=document.getElementById("pv");pv.innerHTML=pvBuild();pvFit();
+ const im=pv.querySelector("img.pvl"),go=()=>{try{window.print()}catch(e){toast("Não foi possível abrir a impressão aqui. Abra o EVA no navegador do aparelho e tente de novo.")}};
+ if(im&&!im.complete)setTimeout(go,350);else go()}catch(e){toast("Não foi possível preparar a impressão.")}}
 const gaps=a=>a.length?Math.max(...a)-Math.min(...a)+1-a.length:0,gd=(a,s)=>gaps(a.concat(s))-gaps(a);
 const pl=p=>p.dem.reduce((a,x)=>a+(+x.aulas||0)*x.turmas.length,0);
 const tot=()=>S.profs.reduce((a,p)=>a+pl(p),0);
@@ -449,5 +496,6 @@ function vBak(){return `<div class="card"><h2>Backup</h2><p class="hint">Os dado
 function impB(){try{const o=JSON.parse(document.getElementById("bk").value);if(!o.cfg||!o.turmas||!o.profs)throw 0;if(o.cfg.i===undefined)o.cfg.i=0;norm(o);S=o;save();draft=null;alert("Dados importados.");go("cfg")}catch(e){alert("Texto inválido. Cole exatamente o conteúdo exportado.")}}
 render();
 </script>
+<div id="pv"></div>
 </body>
 </html>
