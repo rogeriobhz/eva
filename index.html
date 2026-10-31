@@ -22,17 +22,8 @@
   <meta name="apple-mobile-web-app-title" content="EVA">
   <link rel="apple-touch-icon" href="/icons/icon-192.png">
 
-  <!-- Firebase config (inline for early availability) -->
+  <!-- Firebase config (loaded via ES module) -->
   <script type="module">
-    // Config will be loaded from firebase/config.js
-    window.FIREBASE_CFG = {
-      apiKey: "AIzaSyDUMMY_KEY_FOR_DEV",
-      authDomain: "eva-horario.firebaseapp.com",
-      projectId: "eva-horario",
-      storageBucket: "eva-horario.appspot.com",
-      messagingSenderId: "123456789",
-      appId: "1:123456789:web:abcdef"
-    };
     window.ADMIN_EMAILS = ["rogeriobhz@gmail.com"];
     window.SLUG = new URLSearchParams(location.search).get("v") || null;
     window.VIEW_MODE = !!window.SLUG;
