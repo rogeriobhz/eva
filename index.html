@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="EVA - Escalonador de Horários Escolares">
+  <meta name="theme-color" content="#2d6a4f">
+  <title>EVA - Horários Escolares</title>
+
+  <!-- Preload critical resources -->
+  <link rel="preload" href="/src/styles/main.css" as="style">
+  <link rel="preload" href="/src/js/app.js" as="script">
+  <link rel="preload" href="/disciplinas-padrao.json" as="fetch" crossorigin>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/src/styles/main.css">
+
+  <!-- PWA -->
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="EVA">
+  <link rel="apple-touch-icon" href="/icons/icon-192.png">
+
+  <!-- Firebase config (inline for early availability) -->
+  <script type="module">
+    // Config will be loaded from firebase/config.js
+    window.FIREBASE_CFG = {
+      apiKey: "AIzaSyDUMMY_KEY_FOR_DEV",
+      authDomain: "eva-horario.firebaseapp.com",
+      projectId: "eva-horario",
+      storageBucket: "eva-horario.appspot.com",
+      messagingSenderId: "123456789",
+      appId: "1:123456789:web:abcdef"
+    };
+    window.ADMIN_EMAILS = ["rogeriobhz@gmail.com"];
+    window.SLUG = new URLSearchParams(location.search).get("v") || null;
+    window.VIEW_MODE = !!window.SLUG;
+  </script>
+</head>
+<body>
+  <!-- Login screen -->
+  <div id="lg" class="card" style="max-width:400px;margin:60px auto;text-align:center;display:none">
+    <h2>🍎 EVA</h2>
+    <p class="hint">Entre com sua conta Google para acessar suas escolas.</p>
+    <button class="btn g" id="btn-login" style="width:100%;margin-top:16px">Entrar com Google</button>
+    <p id="lm" class="hint" style="color:var(--er);min-height:1.2em"></p>
+  </div>
+
+  <!-- Public view notice -->
+  <div id="lt" class="hint" style="text-align:center;padding:12px;display:none"></div>
+
+  <!-- Main app -->
+  <div class="app" style="display:none">
+    <header>
+      <h1>🍎 <span id="school-name">EVA</span></h1>
+      <div class="head-right">
+        <span id="who" class="hint" style="margin-right:16px"></span>
+        <button class="btn" onclick="FB.out()">Sair</button>
+      </div>
+    </header>
+
+    <nav class="tabs" id="tb" role="tablist" aria-label="Abas principais"></nav>
+
+    <main id="m" role="tabpanel"></main>
+  </div>
+
+  <!-- Print view container -->
+  <div id="pv"></div>
+
+  <!-- Toast template -->
+  <template id="toast-template">
+    <div class="toast"></div>
+  </template>
+
+  <!-- Module entry point -->
+  <script type="module" src="/src/js/app.js"></script>
+
+  <!-- Service Worker registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(() => {});
+      });
+    }
+  </script>
+</body>
+</html>
