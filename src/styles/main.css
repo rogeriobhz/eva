@@ -302,3 +302,82 @@ input[type="checkbox"], input[type="radio"] { width: auto; margin-right: 8px; }
   .btn { width: 100%; }
   .row > div { min-width: 100%; }
 }
+
+/* ===== FULLSCREEN VIEWER ===== */
+.fs-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: fs-in .2s ease;
+}
+@keyframes fs-in { from { opacity: 0; } to { opacity: 1; } }
+
+.fs-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: var(--sf);
+  border-bottom: 1px solid var(--ln);
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.fs-header h2 { margin: 0; font-size: 1.1rem; color: var(--tx); }
+.fs-actions { display: flex; align-items: center; gap: 8px; }
+.fs-zoom { display: flex; align-items: center; gap: 6px; background: var(--bg); border: 1px solid var(--ln); border-radius: 8px; padding: 4px 8px; }
+.fs-btn { width: 32px; height: 32px; padding: 0; display: flex; align-items: center; justify-content: center; font-size: 1rem; border-radius: 6px; background: var(--sf); border: 1px solid var(--ln); color: var(--tx); }
+.fs-btn:hover { background: var(--bl); border-color: var(--bl); color: #fff; }
+.fs-zoom-level { min-width: 50px; text-align: center; font-size: .85rem; font-weight: 600; color: var(--tx); }
+.fs-close { width: 40px; height: 40px; padding: 0; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; border-radius: 8px; background: var(--rd); border: none; color: #fff; }
+.fs-close:hover { background: #a0281a; }
+
+.fs-body {
+  flex: 1;
+  overflow: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  -webkit-overflow-scrolling: touch;
+}
+.fs-body .sc { width: 100%; max-width: none; }
+.fs-body .tbd { font-size: .85rem; }
+.fs-body .tbd td { min-width: 90px; height: 70px; }
+.fs-body .cell { font-size: .8rem; }
+.fs-body .tn { font-size: 1.1rem; margin: 16px 0 8px; }
+.fs-body .pr { width: 100%; max-width: 600px; }
+
+/* Landscape hint for mobile */
+@media (max-width: 768px) and (orientation: portrait) {
+  .fs-overlay::before {
+    content: "Para melhor visualização, gire o dispositivo para paisagem";
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.85);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+    font-size: 1rem;
+    z-index: 2001;
+    animation: fs-in .2s ease;
+  }
+}
+
+/* Desktop zoom hint */
+@media (min-width: 769px) {
+  .fs-zoom::after {
+    content: "Ctrl + scroll para zoom";
+    font-size: .7rem;
+    color: var(--mt);
+    margin-left: 8px;
+    white-space: nowrap;
+  }
+}

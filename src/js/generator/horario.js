@@ -38,7 +38,7 @@ function vGen0() {
     const p = S.profs.find(p => p.nome == view.k);
     for (const tn of tns(p)) h += `<div class="tn">${TI[tn]} ${TN[tn]}</div>` + tbl(k => { for (const t of S.turmas) { const x = S.hor[t]?.[k]; if (S.tur[t] == tn && x && x.prof == view.k) return { disc: x.disc, prof: t, pn: x.prof } } }, Pn(tn), tn);
   }
-  return h + legend() + `<div style="margin-top:14px" class="np"><p class="hint">Para salvar em PDF, toque em Imprimir e escolha Salvar como PDF. As cores saem na impressão.</p><button class="btn g" onclick="prn()">Imprimir / salvar PDF</button></div></div>`;
+  return h + legend() + `<div style="margin-top:14px" class="np"><p class="hint">Para salvar em PDF, toque em Imprimir e escolha Salvar como PDF. As cores saem na impressão.</p><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn g" onclick="prn()">Imprimir / salvar PDF</button><button class="btn" onclick="openFullscreen()" title="Visualizar em tela cheia" style="display:flex;align-items:center;gap:6px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg><span>VER</span></button></div></div>`;
 }
 
 function tns(p) { return TK.filter(k => p.dem.some(x => x.turmas.some(t => S.tur[t] == k))); }
@@ -178,3 +178,146 @@ function pvFit() { /* fit to page */ }
 window.generate = generate;
 window.prn = prn;
 window.togglePub = togglePub;
+window.openFullscreen = openFullscreen;
+window.closeFullscreen = closeFullscreen;
+window.zoomIn = zoomIn;
+window.zoomOut = zoomOut;
+window.resetZoom = resetZoom;
+
+/* ===== TELA CHEIA (VIEWER) ===== */
+let fsZoom = 1;
+let fsContent = "";
+
+function buildFullscreenContent() {
+  if (!S.hor) return "";
+
+  let h = `<div class="fs-header">
+    <h2>${view.m == "n" ? TI[view.k] + " " + TN[view.k] : esc(view.k)}</h2>
+    <div class="fs-actions">
+      <div class="fs-zoom">
+        <button class="btn fs-btn" onclick="zoomOut()" aria-label="Diminuir zoom">−</button>
+        <span class="fs-zoom-level">${Math.round(fsZoom * 100)}%</span>
+        <button class="btn fs-btn" onclick="zoomIn()" aria-label="Aumentar zoom">+</button>
+        <button class="btn fs-btn" onclick="resetZoom()" aria-label="Zoom original">100%</button>
+      </div>
+      <button class="btn fs-close" onclick="closeFullscreen()" aria-label="Fechar tela cheia">✕</button>
+    </div>
+  </div>
+  <div class="fs-body" id="fs-body">`;
+
+  if (view.m == "n") h += tbn(view.k, view.dy || "a") + resumoN(view.k);
+  else if (view.m == "t") h += `<div class="tn">${TI[S.tur[view.k]]} ${TN[S.tur[view.k]]}</div>` + tbl(k => S.hor[view.k]?.[k], ppd(view.k), S.tur[view.k]);
+  else {
+    const p = S.profs.find(p => p.nome == view.k);
+    for (const tn of tns(p)) h += `<div class="tn">${TI[tn]} ${TN[tn]}</div>` + tbl(k => { for (const t of S.turmas) { const x = S.hor[t]?.[k]; if (S.tur[t] == tn && x && x.prof == view.k) return { disc: x.disc, prof: t, pn: x.prof } } }, Pn(tn), tn);
+  }
+
+  h += legend() + `</div>`;
+  return h;
+}
+
+function openFullscreen() {
+  if (!S.hor) { toast("Gere o horário primeiro"); return; }
+  fsZoom = 1;
+  fsContent = buildFullscreenContent();
+
+  const overlay = document.createElement("div");
+  overlay.id = "fs-overlay";
+  overlay.className = "fs-overlay";
+  overlay.innerHTML = fsContent;
+  document.body.appendChild(overlay);
+
+  // Lock body scroll
+  document.body.style.overflow = "hidden";
+
+  // Force landscape on mobile
+  if (screen.orientation && screen.orientation.lock) {
+    screen.orientation.lock("landscape").catch(() => {});
+  }
+
+  // Touch pinch zoom
+  let initialDistance = 0;
+  let startZoom = 1;
+
+  overlay.addEventListener("touchstart", (e) => {
+    if (e.touches.length === 2) {
+      initialDistance = Math.hypot(
+        e.touches[0].clientX - e.touches[1].clientX,
+        e.touches[0].clientY - e.touches[1].clientY
+      );
+      startZoom = fsZoom;
+      e.preventDefault();
+    }
+  }, { passive: false });
+
+  overlay.addEventListener("touchmove", (e) => {
+    if (e.touches.length === 2 && initialDistance > 0) {
+      const currentDistance = Math.hypot(
+        e.touches[0].clientX - e.touches[1].clientX,
+        e.touches[0].clientY - e.touches[1].clientY
+      );
+      fsZoom = Math.max(0.5, Math.min(3, startZoom * (currentDistance / initialDistance)));
+      applyZoom();
+      e.preventDefault();
+    }
+  }, { passive: false });
+
+  overlay.addEventListener("touchend", () => {
+    initialDistance = 0;
+  });
+
+  // Wheel zoom (desktop)
+  overlay.addEventListener("wheel", (e) => {
+    if (e.ctrlKey || e.metaKey) {
+      e.preventDefault();
+      fsZoom = Math.max(0.5, Math.min(3, fsZoom * (e.deltaY > 0 ? 0.9 : 1.1)));
+      applyZoom();
+    }
+  }, { passive: false });
+
+  // ESC to close
+  const escHandler = (e) => { if (e.key === "Escape") closeFullscreen(); };
+  document.addEventListener("keydown", escHandler);
+  overlay._escHandler = escHandler;
+
+  // Focus trap
+  overlay.focus();
+}
+
+function closeFullscreen() {
+  const overlay = document.getElementById("fs-overlay");
+  if (overlay) {
+    if (overlay._escHandler) document.removeEventListener("keydown", overlay._escHandler);
+    overlay.remove();
+  }
+  document.body.style.overflow = "";
+  if (screen.orientation && screen.orientation.unlock) {
+    screen.orientation.unlock();
+  }
+}
+
+function applyZoom() {
+  const body = document.getElementById("fs-body");
+  if (body) {
+    body.style.transform = `scale(${fsZoom})`;
+    body.style.transformOrigin = "top center";
+    body.style.width = `${100 / fsZoom}%`;
+  }
+  const zoomEl = document.querySelector(".fs-zoom-level");
+  if (zoomEl) zoomEl.textContent = `${Math.round(fsZoom * 100)}%`;
+}
+
+function zoomIn() {
+  fsZoom = Math.min(3, fsZoom + 0.1);
+  applyZoom();
+}
+
+function zoomOut() {
+  fsZoom = Math.max(0.5, fsZoom - 0.1);
+  applyZoom();
+}
+
+function resetZoom() {
+  fsZoom = 1;
+  applyZoom();
+}
