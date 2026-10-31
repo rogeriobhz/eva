@@ -1,18 +1,18 @@
 /* ===== FIREBASE CONFIG ===== */
 
-// Firebase configuration - substitua pelos seus valores reais
+// Firebase configuration - substitua pelos seus valores reais do Firebase Console
 export const FIREBASE_CFG = {
-  apiKey: "SUA_API_KEY_AQUI",
-  authDomain: "seu-projeto.firebaseapp.com",
-  projectId: "seu-projeto",
-  storageBucket: "seu-projeto.appspot.com",
-  messagingSenderId: "123456789",
-  appId: "1:123456789:web:abcdef"
+  apiKey: "AIzaSy...",           // ← COLOQUE SUA API KEY AQUI
+  authDomain: "seu-projeto.firebaseapp.com",  // ← SEU AUTH DOMAIN
+  projectId: "seu-projeto",      // ← SEU PROJECT ID
+  storageBucket: "seu-projeto.appspot.com",   // ← SEU STORAGE BUCKET
+  messagingSenderId: "123456789", // ← SEU SENDER ID
+  appId: "1:123456789:web:abcdef" // ← SEU APP ID
 };
 
 // Emails de administradores (podem ver todas as escolas)
 export const ADMIN_EMAILS = [
-  "rogeriobhz@gmail.com"
+  "rogeriodireito@gmail.com"
   // Adicione outros emails de admin aqui
 ];
 
