@@ -76,8 +76,11 @@ export const DL = {
 
 let started = false;
 let currentUser = null;
+let bootstrapFn = null;
 
-export async function initAuth(onReady) {
+export function setBootstrap(fn) { bootstrapFn = fn; }
+
+export async function initAuth() {
   onAuthStateChanged(auth, async (user) => {
     const lg = document.getElementById("lg");
     const appEl = document.querySelector(".app");
@@ -122,9 +125,11 @@ export async function initAuth(onReady) {
     const isAdmin = !SLUG && ADMIN_EMAILS.includes(email);
     const storageKey = "eva-" + (SLUG ? "v-" + SLUG + "-" : "") + user.uid;
 
-    // Carregar app principal
-    const { bootstrap } = await import("/src/js/app.js");
-    bootstrap({ VIEW_MODE, SLUG, USER_MODE: !isAdmin, STORAGE_KEY: storageKey, currentUser });
+    if (bootstrapFn) {
+      bootstrapFn({ VIEW_MODE, SLUG, USER_MODE: !isAdmin, STORAGE_KEY: storageKey, currentUser });
+    } else {
+      console.error("[EVA] Bootstrap function not registered");
+    }
   });
 }
 

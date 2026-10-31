@@ -2,7 +2,7 @@
 
 import { render, initThemeToggle, setState, getState, setView, getView } from "./ui/components.js";
 import { loadDisciplinasPadrao, blankSchool, normSchool, storageGet, storageSet } from "./utils/helpers.js";
-import { auth, db, FB, US, DL, initAuth } from "./firebase/auth.js";
+import { auth, db, FB, US, DL, initAuth, setBootstrap } from "./firebase/auth.js";
 
 let currentUser = null;
 let STORAGE_KEY = null;
@@ -149,18 +149,5 @@ window.US = US;
 window.DL = DL;
 
 // Initialize auth (sets up listener, calls bootstrap when ready)
-initAuth(async (user) => {
-  if (!user) return;
-
-  const email = (user.email || "").toLowerCase();
-  const isAdmin = !SLUG && window.ADMIN_EMAILS?.includes(email);
-  const storageKey = "eva-" + (SLUG ? "v-" + SLUG + "-" : "") + user.uid;
-
-  await bootstrap({
-    VIEW_MODE: window.VIEW_MODE,
-    SLUG: window.SLUG,
-    USER_MODE: !isAdmin,
-    STORAGE_KEY: storageKey,
-    currentUser: user
-  });
-});
+setBootstrap(bootstrap);
+initAuth();
