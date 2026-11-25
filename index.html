@@ -3,27 +3,208 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="EVA - Escalonador de Horários Escolares">
-  <meta name="theme-color" content="#2d6a4f">
-  <title>EVA - Horários Escolares</title>
+  <meta name="description" content="Eva Soluções Intuitivas - Escalonador de Horários Escolares">
+  <meta name="theme-color" content="#000000">
+  <title>Eva Soluções Intuitivas - Horários Escolares</title>
 
   <link rel="icon" type="image/svg+xml" href="/icons/icon.svg">
   <link rel="manifest" href="/manifest.webmanifest">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="EVA">
+
+  <!-- Fonte Inter (pesos 200, 400, 600) fiel ao estilo Dala -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;400;600&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="/src/css/main.css">
   <script type="module" src="/src/js/app.js"></script>
+
+  <style>
+    /* Estilo da Capa (Dala Design System) aplicado exclusivamente à tela de login (#lg) */
+    #lg.dala-hero {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      max-width: none;
+      margin: 0;
+      padding: 24px;
+      background-color: #000000;
+      color: #ffffff;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      border: none;
+      border-radius: 0;
+      box-shadow: none;
+      overflow: hidden;
+      z-index: 9999;
+      box-sizing: border-box;
+    }
+
+    #dala-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .dala-container {
+      position: relative;
+      z-index: 2;
+      max-width: 1280px;
+      height: 100%;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .dala-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 12px;
+    }
+
+    .dala-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 16px;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      color: #ffffff;
+    }
+
+    .dala-brand-mark {
+      width: 18px;
+      height: 18px;
+      background: linear-gradient(135deg, #8052ff 0%, #15846e 100%);
+      clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+    }
+
+    .dala-tag {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #9a9a9a;
+    }
+
+    .dala-main {
+      max-width: 820px;
+      margin: auto 0;
+      text-align: left;
+    }
+
+    .dala-title {
+      font-size: clamp(42px, 7.5vw, 96px);
+      font-weight: 400;
+      line-height: 1.02;
+      letter-spacing: -0.04em;
+      color: #ffffff;
+      margin: 0 0 24px 0;
+    }
+
+    .dala-title span {
+      color: #ffb829; /* Saffron Spark */
+    }
+
+    .dala-subtitle {
+      font-size: 18px;
+      font-weight: 200;
+      line-height: 1.5;
+      color: #bdbdbd;
+      max-width: 540px;
+      margin: 0 0 36px 0;
+    }
+
+    /* Botão pílula Electric Iris (#8052ff) */
+    #lg.dala-hero #btn-login {
+      width: auto !important;
+      margin-top: 0 !important;
+      background-color: #8052ff !important;
+      color: #ffffff !important;
+      border: none !important;
+      border-radius: 9999px !important;
+      padding: 15px 32px !important;
+      font-family: 'Inter', sans-serif !important;
+      font-size: 14px !important;
+      font-weight: 600 !important;
+      letter-spacing: 0.025em !important;
+      text-transform: uppercase !important;
+      cursor: pointer;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+
+    #lg.dala-hero #btn-login:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    #lg.dala-hero #lm {
+      color: #ffb829 !important;
+      font-size: 14px;
+      font-weight: 400;
+      margin-top: 16px;
+      text-align: left;
+    }
+
+    .dala-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 12px;
+      font-size: 13px;
+      font-weight: 200;
+      color: #9a9a9a;
+    }
+
+    @media (max-width: 640px) {
+      .dala-main {
+        text-align: left;
+      }
+      #lg.dala-hero #btn-login {
+        width: 100% !important;
+        text-align: center;
+      }
+    }
+  </style>
 </head>
 <body>
-  <!-- Tela de login -->
-  <div id="lg" class="card" style="max-width:400px;margin:60px auto;text-align:center;display:none">
-    <h2>🍎 EVA</h2>
-    <p class="hint">Entre com sua conta Google para acessar suas escolas.</p>
-    <button class="btn g" id="btn-login" onclick="FB.login()" style="width:100%;margin-top:16px">Entrar com Google</button>
-    <p id="lm" class="hint" style="color:var(--er);min-height:1.2em"></p>
+  <!-- Tela de login (Capa estilo Dala) -->
+  <div id="lg" class="card dala-hero" style="display:none">
+    <canvas id="dala-canvas"></canvas>
+
+    <div class="dala-container">
+      <header class="dala-header">
+        <div class="dala-brand">
+          <div class="dala-brand-mark" aria-hidden="true"></div>
+          <span>Eva Soluções Intuitivas</span>
+        </div>
+        <span class="dala-tag">Gestão Escolar</span>
+      </header>
+
+      <main class="dala-main">
+        <h1 class="dala-title">
+          Sua grade horária tem a resposta. <span>Pergunte à Eva.</span>
+        </h1>
+        <p class="dala-subtitle">
+          Escalonamento inteligente de horários escolares e distribuição de aulas com precisão e fluidez. Entre com sua conta Google para acessar suas escolas.
+        </p>
+
+        <button class="btn g" id="btn-login" onclick="FB.login()">Entrar com Google</button>
+        <p id="lm" class="hint" style="min-height:1.2em"></p>
+      </main>
+
+      <footer class="dala-footer">
+        <span>EVA · Escalonador de Horários</span>
+        <span>evahorario.vercel.app</span>
+      </footer>
+    </div>
   </div>
 
   <!-- Aviso (visualização pública) -->
@@ -50,5 +231,97 @@
   <template id="toast-template">
     <div class="toast"></div>
   </template>
+
+  <!-- Animação da Constelação Triangular (Dala) -->
+  <script>
+    (function () {
+      const canvas = document.getElementById('dala-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const colors = ['#8052ff', '#ffb829', '#15846e', '#d946ef', '#38bdf8'];
+      let particles = [];
+      let w, h;
+
+      function resize() {
+        w = canvas.width = window.innerWidth;
+        h = canvas.height = window.innerHeight;
+        initParticles();
+      }
+
+      function initParticles() {
+        particles = [];
+        const count = Math.min(260, Math.floor((w * h) / 4500));
+        const cx = w * 0.68;
+        const cy = h * 0.48;
+        const radiusX = Math.min(w * 0.28, 320);
+        const radiusY = Math.min(h * 0.32, 300);
+
+        for (let i = 0; i < count; i++) {
+          const isCore = i < count * 0.78;
+          let x, y;
+          if (isCore) {
+            const angle = Math.random() * Math.PI * 2;
+            const r = Math.pow(Math.random(), 0.6);
+            const lobe = Math.sin(angle * 3) * 0.18 + Math.cos(angle * 2) * 0.15;
+            x = cx + Math.cos(angle) * radiusX * r * (1 + lobe);
+            y = cy + Math.sin(angle) * radiusY * r * (1 + lobe);
+          } else {
+            x = Math.random() * w;
+            y = Math.random() * h;
+          }
+
+          particles.push({
+            x,
+            y,
+            baseX: x,
+            baseY: y,
+            size: Math.random() * 4.5 + 2.5,
+            angle: Math.random() * Math.PI * 2,
+            rotSpeed: (Math.random() - 0.5) * 0.015,
+            floatOffset: Math.random() * Math.PI * 2,
+            floatAmp: Math.random() * 6 + 2,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            alpha: isCore ? Math.random() * 0.65 + 0.25 : Math.random() * 0.35 + 0.1
+          });
+        }
+      }
+
+      function drawTriangle(p, t) {
+        const px = p.baseX + Math.cos(t * 0.001 + p.floatOffset) * p.floatAmp;
+        const py = p.baseY + Math.sin(t * 0.0012 + p.floatOffset) * p.floatAmp;
+        p.angle += p.rotSpeed;
+
+        ctx.save();
+        ctx.translate(px, py);
+        ctx.rotate(p.angle);
+        ctx.strokeStyle = p.color;
+        ctx.globalAlpha = p.alpha;
+        ctx.lineWidth = 1.1;
+
+        ctx.beginPath();
+        ctx.moveTo(0, -p.size);
+        ctx.lineTo(-p.size * 0.86, p.size * 0.6);
+        ctx.lineTo(p.size * 0.86, p.size * 0.6);
+        ctx.closePath();
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      function animate(t) {
+        const lg = document.getElementById('lg');
+        if (lg && lg.style.display !== 'none') {
+          ctx.clearRect(0, 0, w, h);
+          for (let i = 0; i < particles.length; i++) {
+            drawTriangle(particles[i], t);
+          }
+        }
+        requestAnimationFrame(animate);
+      }
+
+      window.addEventListener('resize', resize);
+      resize();
+      requestAnimationFrame(animate);
+    })();
+  </script>
 </body>
 </html>
